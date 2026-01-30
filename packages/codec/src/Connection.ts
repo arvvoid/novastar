@@ -128,9 +128,9 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
 
   public send(req: Request<boolean>): Promise<Packet | void> {
     return new Promise<Packet | void>((resolve, reject) => {
-      this.ready = this.ready.finally().then(() => {
+      // this.ready = this.ready.finally().then(() => {
         const chunks = Request.makeChunks(req, this.getMaxLength(req));
-        return series(chunks, chunk => this.sendImpl(chunk))
+        series(chunks, chunk => this.sendImpl(chunk))
           .then(results => {
             const responses = results.filter(notEmpty);
             if (responses.length === 0) return resolve();
@@ -151,7 +151,7 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
             return resolve(result);
           })
           .catch(reject);
-      });
+      // });
     });
   }
 
