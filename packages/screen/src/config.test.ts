@@ -2,7 +2,8 @@ import path from 'path';
 import { inspect } from 'util';
 
 import { compress, decompress } from '@sarakusha/lzma';
-import { type X2jOptions, XMLParser } from 'fast-xml-parser';
+import type { X2jOptions } from "fast-xml-parser";
+import { XMLParser } from 'fast-xml-parser';
 
 import { pack, toHex, unpack } from './common';
 import { loadScanBoardConfig, loadScreenConfig, loadSystemConfig } from './configs';
@@ -52,6 +53,11 @@ describe('cfg', () => {
   });
   it('SCR', () => {
     const pathname = path.resolve(__dirname, '../../../cfg/test.scr');
+    const cfg = loadScreenConfig(pathname);
+    console.log(inspect(cfg, false, null));
+  });
+  it('NN_20250814_18', () => {
+    const pathname = '/Users/sarakusha/Downloads/NN_20250814_18.scr';
     const cfg = loadScreenConfig(pathname);
     console.log(inspect(cfg, false, null));
   });

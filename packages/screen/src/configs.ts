@@ -5,7 +5,7 @@ import { ScanBoardProperty } from '@novastar/native/ScanBoardProperty';
 import { SystemParameterConfig } from '@novastar/native/SystemParameterConfig';
 import Zip from 'adm-zip';
 import debugFactory from 'debug';
-import { XMLParser, type X2jOptions } from 'fast-xml-parser';
+import { type X2jOptions, XMLParser } from 'fast-xml-parser';
 import { isLeft } from 'fp-ts/Either';
 import * as t from 'io-ts';
 import { PathReporter } from 'io-ts/PathReporter';
@@ -111,6 +111,7 @@ export const decodeScreenConfig = (buffer: Buffer): ScrConfig => {
     }));
   }
   if (size + 11 < buffer.length) {
+    /* empty */
   }
   return {
     ...screenInfo,

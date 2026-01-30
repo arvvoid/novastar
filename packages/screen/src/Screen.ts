@@ -6,7 +6,11 @@ import { SessionAPI } from './Session';
 const MAX_USHORT = 0xffff;
 
 export default class Screen {
-  constructor(readonly session: SessionAPI) {}
+  readonly session: SessionAPI;
+
+  constructor(session: SessionAPI) {
+    this.session = session;
+  }
 
   private _top = 0;
 

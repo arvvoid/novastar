@@ -61,7 +61,7 @@ const gain384: GainSteps = Array(384).map<ValueGain>((_, index) => [
   index < 192 ? (index + 64) / 512 : (index - 128) / 256,
 ]);
 
-const ChipInherentProperties: { [K in keyof typeof ChipTypeEnum]?: ChipInfo } = {
+export const ChipInherentProperties: { [K in keyof typeof ChipTypeEnum]?: ChipInfo } = {
   Chip_CommonBase: chipInfo(ChipTypeEnum.Chip_CommonBase, true, false, false, 16),
   Chip_MBI5167: chipInfo(ChipTypeEnum.Chip_MBI5167, true, false, false, 8),
   Chip_SUM2017: chipInfo(ChipTypeEnum.Chip_SUM2017, true, false, false, 16),
