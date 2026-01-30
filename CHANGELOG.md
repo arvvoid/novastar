@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.2](https://github.com/sarakusha/novastar/compare/v2.2.0-alpha.0...v2.2.0-alpha.2) (2026-01-30)
+
+### Features
+
+- non-blocking packet transmission
+  ([85990ac](https://github.com/sarakusha/novastar/commit/85990aca36f068442cb72c654c8b52c7da91a1f1))
+
+# Change Log
+
+All notable changes to this project will be documented in this file. See
+[Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 # [2.2.0-alpha.0](https://github.com/sarakusha/novastar/compare/v2.1.0...v2.2.0-alpha.0) (2025-04-28)
 
 ### Features
