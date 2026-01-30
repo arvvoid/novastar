@@ -32,8 +32,7 @@ export default class NovastarDecoder extends Transform {
         this.buf = this.recognize(data);
       }
 
-      this.last.length > 0 && debug(`>>> ${this.last.join(', ')} [${this.last.map(pkg => pkg.serno)
-        .join(', ')}]`);
+      if (this.last.length > 0) debug(`>>> [${this.last.map(pkg => pkg.serno).join(', ')}]`);
       this.last.length = 0;
     }
     callback();
@@ -50,7 +49,7 @@ export default class NovastarDecoder extends Transform {
       if (rest <= 0) return empty;
       const start = data.indexOf(
         rest < preamble.length ? preamble.slice(0, rest) : preamble,
-        offset,
+        offset
       );
       if (start === -1) return empty;
       const frame = data.slice(start);

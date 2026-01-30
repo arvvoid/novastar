@@ -21,7 +21,7 @@ export default class NovastarEncoder extends Transform {
       if (pkg instanceof Request) {
         Request.crc(pkg, true);
         const raw = Request.raw(pkg);
-        debug(`<<< ${pkg} [${pkg.serno}:${pkg.tag ?? ''}]`);
+        debug(`<<< [${pkg.serno}:${pkg.tag ?? ''}]`);
         this.push(raw);
       }
     });
