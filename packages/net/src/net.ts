@@ -127,6 +127,7 @@ export class NetBinding extends TypedEmitter<NetBindingEvents> {
     this.#sessions[fullAddress] = session;
     let reconnectRequired = true;
     socket.on('error', err => {
+      debug('error %s (%s)', err.message, address);
       const { code } = err as NodeJS.ErrnoException;
       if (code && ['ECONNREFUSED', 'ECONNRESET'].includes(code))
         reconnectRequired = false;
@@ -134,11 +135,12 @@ export class NetBinding extends TypedEmitter<NetBindingEvents> {
     socket.on('close', async hadError => {
       connection.close();
       if (hadError && reconnectRequired) {
-        debug('try reconnect');
+        debug('try reconnect %s', address);
         reconnectRequired = false;
         this.emit('disconnect', fullAddress);
         await delay(1000);
         socket.connect(port, host, () => {
+          debug('reconnect %s', address);
           reconnectRequired = true;
         });
       } else {
