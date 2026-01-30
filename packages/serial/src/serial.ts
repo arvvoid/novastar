@@ -1,5 +1,5 @@
 import { API, Connection, Session } from '@novastar/codec';
-import Conf, { Schema } from 'conf';
+import Conf, { type Schema } from 'conf';
 import debugFactory from 'debug';
 import { SerialPort } from 'serialport';
 import { OpenOptions, PortInfo } from '@serialport/bindings-cpp';
@@ -134,20 +134,17 @@ export class SerialBinding extends TypedEmitter<SerialBindingEvents> {
       if (session) {
         resolve(session);
       } else {
-        const port = new SerialPort(
-          { ...opts, parity: 'none' },
-          err => {
-            if (err) reject(err);
-            else {
-              const connection = new Connection(port);
-              session = new Session(connection);
-              this.sessions[path] = session;
-              connection.once('close', () => this.close(path));
-              resolve(session);
-              this.emit('open', path);
-            }
+        const port = new SerialPort({ ...opts, parity: 'none' }, err => {
+          if (err) reject(err);
+          else {
+            const connection = new Connection(port);
+            session = new Session(connection);
+            this.sessions[path] = session;
+            connection.once('close', () => this.close(path));
+            resolve(session);
+            this.emit('open', path);
           }
-        );
+        });
         port.once('close', () => this.close(path));
       }
     });
