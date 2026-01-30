@@ -93,10 +93,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@novastar/codec": "workspace:^",
-    "@novastar/native": "workspace:^",
-    "@novastar/net": "workspace:^",
-    "@novastar/serial": "workspace:^",
+    "@novastar/codec": "^2.2.0-alpha.2",
+    "@novastar/native": "^2.2.0-alpha.2",
+    "@novastar/net": "^2.2.0-alpha.2",
+    "@novastar/serial": "^2.2.0-alpha.2",
     "@sarakusha/lzma": "^2.3.3",
     "adm-zip": "^0.5.9",
     "fast-xml-parser": "^4.5.3",
@@ -124,5 +124,6 @@
     "assets": [
       "../../node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node"
     ]
-  }
+  },
+  "gitHead": "f13c5bd88cc8c87c92f904541e5cdcbefa81b773"
 }

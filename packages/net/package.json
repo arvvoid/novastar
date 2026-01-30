@@ -61,10 +61,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@novastar/codec": "workspace:^",
+    "@novastar/codec": "^2.2.0-alpha.2",
     "tiny-typed-emitter": "^2.1.0"
   },
   "peerDependencies": {
     "debug": "^4.3.3"
-  }
+  },
+  "gitHead": "f13c5bd88cc8c87c92f904541e5cdcbefa81b773"
 }

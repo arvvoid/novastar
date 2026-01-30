@@ -78,7 +78,7 @@
     "requirements": "^1.4.1"
   },
   "dependencies": {
-    "@novastar/codec": "workspace:^",
+    "@novastar/codec": "^2.2.0-alpha.2",
     "eslint-plugin-import": "^2.31.0",
     "fp-ts": "^2.11.5",
     "io-ts": "^2.2.16",
@@ -103,5 +103,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "f13c5bd88cc8c87c92f904541e5cdcbefa81b773"
 }

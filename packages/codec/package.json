@@ -80,5 +80,6 @@
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "f13c5bd88cc8c87c92f904541e5cdcbefa81b773"
 }
