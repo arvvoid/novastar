@@ -9,7 +9,7 @@ const nodeConfig: Options = {
   format: ['cjs', 'esm'],
   minify: false,
   // outDir: 'build',
-  target: 'es2021',
+  target: 'es2022',
   treeshake: true,
   sourcemap: true,
 };

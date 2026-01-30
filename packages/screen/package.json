@@ -1,6 +1,6 @@
 {
   "name": "@novastar/screen",
-  "version": "2.2.0-alpha.0",
+  "version": "2.2.0-alpha.1",
   "description": "NovaStar API wrapper",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -60,7 +60,7 @@
     "test:unit": "jest src",
     "total-check": "rimraf check.log && run-for-every-file --src 'src/**.ts' --not-file 'src/*.test.ts' --run 'echo {{src-file}} >> check.log && tsc --noEmit --diagnostics --esModuleInterop --target es2021 --moduleResolution node {{src-file}} >> check.log' ",
     "yalc:push": "yalc push",
-    "yalc:update": "yarn build && yalc publish --push"
+    "yalc:update": "pnpm build && yalc publish --push"
   },
   "files": [
     "dist",
@@ -81,7 +81,7 @@
     ],
     "globals": {
       "ts-jest": {
-        "isolatedModules": true
+        "isolatedModules": false
       }
     },
     "moduleNameMapper": {
@@ -99,7 +99,7 @@
     "@novastar/serial": "workspace:^",
     "@sarakusha/lzma": "^2.3.3",
     "adm-zip": "^0.5.9",
-    "fast-xml-parser": "^4.0.0-beta.8",
+    "fast-xml-parser": "^4.5.3",
     "fp-ts": "^2.11.5",
     "io-ts": "^2.2.16",
     "lodash": "^4.17.21",
@@ -124,8 +124,5 @@
     "assets": [
       "../../node_modules/serialport/node_modules/@serialport/bindings/build/Release/bindings.node"
     ]
-  },
-  "bin": {
-    "rctest": "build/main/rcTest.js"
   }
 }

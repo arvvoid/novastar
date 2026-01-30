@@ -1,6 +1,6 @@
 {
   "name": "@novastar/net",
-  "version": "2.2.0-alpha.0",
+  "version": "2.2.0-alpha.1",
   "description": "Network binding for @novastar/codec",
   "main": "dist/net.js",
   "types": "dist/net.d.ts",
@@ -37,7 +37,7 @@
     "test:spelling": "cspell \"{README.md,.github/*.md,src/**/*.ts}\"",
     "test:unit": "jest src",
     "yalc:push": "yalc push",
-    "yalc:update": "yarn build && yalc publish --push"
+    "yalc:update": "pnpm build && yalc publish --push"
   },
   "files": [
     "dist",

@@ -19,7 +19,7 @@ const nodeConfig: Options = {
   dts: true,
   format: ['cjs', 'esm'],
   minify: false,
-  target: 'es2021',
+  target: 'es2022',
   treeshake: true,
   sourcemap: true,
   splitting: true,

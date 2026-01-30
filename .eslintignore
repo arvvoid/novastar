@@ -4,3 +4,4 @@ build/
 eslint-plugin-import-resolver.js
 **/tsup.config.ts
 **/dist/
+packages/screen/src/ScanboardData.test.ts
