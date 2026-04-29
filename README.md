@@ -24,6 +24,18 @@ dofile("/full_path_to/wireshark/novastar.lua")
 
 `addressMapping.lua` must be located in the same folder as `novastar.lua`.
 
+**Port Configuration:**
+By default, the dissector is bound to TCP ports `5200`, `5201`, and `5203`. If you need to analyze traffic on different ports, you can easily add or remove them by editing the `NOVASTAR_PORTS` list at the beginning of the `novastar.lua` file:
+
+```lua
+local NOVASTAR_PORTS = {
+    5200,
+    5201,
+    5203,
+    -- Add custom ports here
+}
+```
+
 On Windows the personal plugin folder is ```%APPDATA%\Wireshark\plugins```.
 
 On Unix-like systems the personal plugin folder is ```~/.local/lib/wireshark/plugins```

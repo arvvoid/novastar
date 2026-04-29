@@ -1,5 +1,19 @@
-local folderOfThisFile = debug.getinfo(1).source:match("@?(.*/)")
-local addresses = require(folderOfThisFile .. "/addressMapping")
+-- local folderOfThisFile = debug.getinfo(1).source:match("@?(.*/)")
+-- local addresses = require(folderOfThisFile .. "/addressMapping")
+local source = debug.getinfo(1).source
+local folderOfThisFile = source:match("@?(.+[\\/])") or ""
+
+package.path = folderOfThisFile .. "?.lua;" .. package.path
+local addresses = require("addressMapping")
+
+-- List of TCP ports used by the Novastar protocol.
+-- You can easily add or remove ports here.
+local NOVASTAR_PORTS = {
+    5200,
+    5201,
+    5203,
+}
+
 NOVASTAR_PROTO = Proto ("novastar", "Novastar Protocol")
 
 local f_head = ProtoField.uint16("novastar.head", "Header", base.HEX, {[0xaa55] = "Request", [0x55aa] = "Response" })
@@ -61,42 +75,81 @@ NOVASTAR_PROTO.fields = {
 }
 
 NOVASTAR_PROTO.experts = { ef_timeout, ef_request, ef_response, ef_invalid }
-local experts = { [1] = ef_timeout, [2] = ef_request, [3] = ef_response, [4] = ef_invalid }
+local experts = { [1] = ef_timeout, [2] = ef_request, [3] = ef_response, [4] = ef_invalid, [255] = ef_invalid }
 
 function NOVASTAR_PROTO.dissector (buf, pinfo, tree)
-  if buf:len() < 20 then return end
-  pinfo.cols.protocol = NOVASTAR_PROTO.name
-  local subtree = tree:add(NOVASTAR_PROTO, buf(0))
+  if buf:len() < 20 then
+    pinfo.desegment_len = DESEGMENT_ONE_MORE_SEGMENT
+    pinfo.desegment_offset = 0
+    return
+  end
+
   local header = buf(0, 2):le_uint()
-  subtree:add_le(f_head, buf(0, 2))
+  if header ~= 0x55aa and header ~= 0xaa55 then
+    return 0
+  end
+
+  local io = buf(10, 1):uint()
+  local length = buf(16, 2):le_uint()
+
+  local expected_packet_len = 20
+  if length > 0 and ((header == 0x55aa and io == 0) or (header == 0xaa55 and io == 1)) then
+    expected_packet_len = 20 + length
+  end
+
+  if buf:len() < expected_packet_len then
+    pinfo.desegment_len = expected_packet_len - buf:len()
+    pinfo.desegment_offset = 0
+    return
+  end
+
+  local pktbuf = buf(0, expected_packet_len)
+  
+  pinfo.cols.protocol = NOVASTAR_PROTO.name
+  pinfo.cols.info:clear()
+  if header == 0xaa55 then
+    pinfo.cols.info:append("Request")
+  else
+    pinfo.cols.info:append("Response")
+  end
+
+  local subtree = tree:add(NOVASTAR_PROTO, pktbuf)
+  subtree:add_le(f_head, pktbuf(0, 2))
+  
   if (header == 0x55aa) then
-    local ack = buf(2, 1):uint()
-    subtree:add(f_ack, buf(2, 1))
-    if (ack > 0 and ack <= 4) then
+    local ack = pktbuf(2, 1):uint()
+    subtree:add(f_ack, pktbuf(2, 1))
+    if experts[ack] then
       subtree:add_proto_expert_info(experts[ack])
     end
   end
-  subtree:add(f_serno, buf(3, 1))
-  subtree:add(f_source, buf(4, 1))
-  subtree:add(f_destination, buf(5, 1))
-  subtree:add(f_deviceType, buf(6, 1))
-  subtree:add(f_port, buf(7, 1))
-  subtree:add_le(f_rcvIndex, buf(8, 2))
-  local io = buf(10, 1):uint()
-  subtree:add(f_io, buf(10, 1))
-  subtree:add_le(f_address, buf(12, 4))
-  local length = buf(16, 2):le_uint()
+  
+  subtree:add(f_serno, pktbuf(3, 1))
+  subtree:add(f_source, pktbuf(4, 1))
+  subtree:add(f_destination, pktbuf(5, 1))
+  subtree:add(f_deviceType, pktbuf(6, 1))
+  subtree:add(f_port, pktbuf(7, 1))
+  subtree:add_le(f_rcvIndex, pktbuf(8, 2))
+  subtree:add(f_io, pktbuf(10, 1))
+  
+  local address = pktbuf(12, 4):le_uint()
+  subtree:add_le(f_address, pktbuf(12, 4))
+  pinfo.cols.info:append(string.format(" Addr: 0x%08X", address))
+
   local offset = 18
   if length > 0 then
-    subtree:add_le(f_length, buf(16, 2))
-    if ((header == 0x55aa and io == 0) or (header == 0xaa55 and io == 1)) then
-      subtree:add(f_data, buf(offset, length))
+    subtree:add_le(f_length, pktbuf(16, 2))
+    if expected_packet_len > 20 then
+      subtree:add(f_data, pktbuf(offset, length))
       offset = offset + length
     end
   end
-  subtree:add_le(f_crc, buf(offset, 2))
+  subtree:add_le(f_crc, pktbuf(offset, 2))
+  
+  return expected_packet_len
 end
 
 local tcp_dissector_table = DissectorTable.get("tcp.port")
-tcp_dissector_table:add(5200, NOVASTAR_PROTO)
-tcp_dissector_table:add(5201, NOVASTAR_PROTO)
+for _, port in ipairs(NOVASTAR_PORTS) do
+  tcp_dissector_table:add(port, NOVASTAR_PROTO)
+end
