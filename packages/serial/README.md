@@ -25,7 +25,7 @@ import { Request } from '@novastar/codec';
 import serial, { findSendingCards } from '@novastar/serial';
 
 const [port] = await findSendingCards();
-const session = await serial.open(port.path);
+const session = await serial.open({ path: port.path, baudRate: 115200 });
 const readReq = new Request(1);
 readReq.deviceType = DeviceType.ReceivingCard;
 readReq.address = 0x02000001;
