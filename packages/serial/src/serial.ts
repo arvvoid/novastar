@@ -137,7 +137,7 @@ export class SerialBinding extends TypedEmitter<SerialBindingEvents> {
         const port = new SerialPort({ ...opts, parity: 'none' }, err => {
           if (err) reject(err);
           else {
-            const connection = new Connection(port);
+            const connection = new Connection(port, { serial: true });
             session = new Session(connection);
             this.sessions[path] = session;
             connection.once('close', () => this.close(path));

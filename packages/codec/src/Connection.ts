@@ -32,9 +32,32 @@ const debug = debugFactory('novastar:connection');
 
 type Result<SkipErrors extends boolean = false> = SkipErrors extends false ? Packet : Packet | null;
 
-type Response<Broadcast extends boolean, SkipErrors extends boolean = false> = Promise<Broadcast extends false
-  ? Result<SkipErrors>
-  : void>;
+type Response<Broadcast extends boolean, SkipErrors extends boolean = false> = Promise<
+  Broadcast extends false ? Result<SkipErrors> : void
+>;
+
+type ConnectionParams = {
+  /**
+   * automatically opens this connection, see {@link Connection.open}
+   * @default true
+   */
+  open?: boolean;
+  /**
+   * Default timeout for this connection
+   * @default 1000
+   */
+  timeout?: number;
+  /**
+   * Maximum default data length in single {@link Request} for this connection
+   * @default 256
+   */
+  maxLength?: number;
+  /**
+   * Whether to process requests serially
+   * @default false
+   */
+  serial?: boolean;
+};
 
 /**
  * Wrapper for I/O stream using {@link Request} for out and {@link Packet} to in
@@ -60,15 +83,20 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
 
   private connected = false;
 
+  protected serial = false;
+
   /**
    * Constructor
    * @param stream - wrapped I/O stream
-   * @param open - automatically opens this connection, see {@link Connection.open}
-   * @param timeout - default timeout for this connection
    */
-  constructor(readonly stream: S, open = true, timeout = 1000) {
+  constructor(
+    readonly stream: S,
+    { open = true, timeout = 1000, maxLength = 256, serial = false }: ConnectionParams = {},
+  ) {
     super();
     this.timeout = timeout;
+    this.maxLength = maxLength;
+    this.serial = serial;
     if (open) this.open();
   }
 
@@ -129,15 +157,16 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
   public send(req: Request<boolean>): Promise<Packet | void> {
     return new Promise<Packet | void>((resolve, reject) => {
       // this.ready = this.ready.finally().then(() => {
+      const executeSend = () => {
         const chunks = Request.makeChunks(req, this.getMaxLength(req));
-        series(chunks, chunk => this.sendImpl(chunk))
-          .then(results => {
+        series(chunks, (chunk) => this.sendImpl(chunk))
+          .then((results) => {
             const responses = results.filter(notEmpty);
             if (responses.length === 0) return resolve();
             const [first] = responses;
             if (responses.length === 1) return resolve(first);
             const srcRaw = Packet.raw(first);
-            const total = Buffer.concat(responses.map(res => res.data));
+            const total = Buffer.concat(responses.map((res) => res.data));
             const result = new Packet(total.length + Packet.baseSize);
             srcRaw.copy(Packet.raw(result));
             // Object.entries(first.toJSON()).forEach(([name, value]) => {
@@ -151,6 +180,9 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
             return resolve(result);
           })
           .catch(reject);
+      };
+      if (this.serial) this.ready = this.ready.finally().then(executeSend);
+      else executeSend();
       // });
     });
   }
