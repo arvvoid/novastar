@@ -1,9 +1,9 @@
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type Options } from 'tsdown';
 
 const nodeConfig: Options = {
   name: 'node',
   platform: 'node',
-  entry: ['src/net.ts'],
+  entry: ['src/index.ts', 'src/getScreenLocation.ts', 'src/common.ts'],
   clean: true,
   dts: true,
   format: ['cjs', 'esm'],

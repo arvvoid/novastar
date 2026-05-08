@@ -2,34 +2,37 @@
   "name": "@novastar/screen",
   "version": "2.2.0-alpha.2",
   "description": "NovaStar API wrapper",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.mts",
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
     },
     "./common": {
-      "require": "./dist/common.js",
-      "import": "./dist/common.mjs"
+      "require": "./dist/common.cjs",
+      "import": "./dist/common.mjs",
+      "types": "./dist/common.d.mts"
     },
     "./getScreenLocation": {
-      "require": "./dist/getScreenLocation.js",
-      "import": "./dist/getScreenLocation.mjs"
+      "require": "./dist/getScreenLocation.cjs",
+      "import": "./dist/getScreenLocation.mjs",
+      "types": "./dist/getScreenLocation.d.mts"
     },
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/index.d.ts"
+        "./dist/index.d.mts"
       ],
       "common": [
-        "./dist/common.d.ts"
+        "./dist/common.d.mts"
       ],
       "getScreenLocation": [
-        "./dist/getScreenLocation.d.ts"
+        "./dist/getScreenLocation.d.mts"
       ]
     }
   },
@@ -48,7 +51,7 @@
     "Nova Mars SDK"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint src --ext .ts --fix -c ../../.eslintrc-prod.js",

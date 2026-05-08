@@ -2,13 +2,14 @@
   "name": "@novastar/net",
   "version": "2.2.0-alpha.2",
   "description": "Network binding for @novastar/codec",
-  "main": "dist/net.js",
-  "types": "dist/net.d.ts",
+  "main": "dist/net.cjs",
+  "types": "dist/net.d.mts",
   "module": "dist/net.mjs",
   "exports": {
     ".": {
-      "require": "./dist/net.js",
-      "import": "./dist/net.mjs"
+      "require": "./dist/net.cjs",
+      "import": "./dist/net.mjs",
+      "types": "./dist/net.d.mts"
     },
     "./package.json": "./package.json"
   },
@@ -27,7 +28,7 @@
     "Nova Mars SDK"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint src --ext .ts --fix -c ../../.eslintrc-prod.js",

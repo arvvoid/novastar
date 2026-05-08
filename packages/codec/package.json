@@ -3,13 +3,14 @@
   "version": "2.2.0-alpha.2",
   "description": "Core API for communication with devices using NovaStar protocol",
   "author": "Andrei Sarakeev <sarakusha@gmail.com>",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.mts",
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
     },
     "./package.json": "./package.json"
   },
@@ -27,7 +28,7 @@
   },
   "homepage": "https://sarakusha.github.io/novastar/",
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint src --ext .ts --fix -c ../../.eslintrc-prod.js",

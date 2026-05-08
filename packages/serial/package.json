@@ -4,13 +4,14 @@
   "description": "Serial binding for @novastar/codec",
   "license": "MIT",
   "author": "Andrei Sarakeev <sarakusha@gmail.com>",
-  "main": "dist/serial.js",
-  "types": "dist/serial.d.ts",
+  "main": "dist/serial.cjs",
+  "types": "dist/serial.d.mts",
   "module": "dist/serial.mjs",
   "exports": {
     ".": {
-      "require": "./dist/serial.js",
-      "import": "./dist/serial.mjs"
+      "require": "./dist/serial.cjs",
+      "import": "./dist/serial.mjs",
+      "types": "./dist/serial.d.mts"
     },
     "./package.json": "./package.json"
   },
@@ -36,7 +37,7 @@
     "debug": "^4.3.3"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:lint": "eslint src --ext .ts --fix -c ../../.eslintrc-prod.js",

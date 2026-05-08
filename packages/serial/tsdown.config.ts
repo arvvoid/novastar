@@ -1,13 +1,14 @@
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type Options } from 'tsdown';
 
 const nodeConfig: Options = {
   name: 'node',
   platform: 'node',
-  entry: ['src/index.ts'],
+  entry: ['src/serial.ts'],
   clean: true,
   dts: true,
   format: ['cjs', 'esm'],
   minify: false,
+  // outDir: 'build',
   target: 'es2022',
   treeshake: true,
   sourcemap: true,

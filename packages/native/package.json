@@ -16,25 +16,29 @@
     "directory": "packages/native"
   },
   "homepage": "https://sarakusha.github.io/novastar/",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.mts",
   "module": "dist/index.mjs",
   "exports": {
     "./*": {
-      "require": "./dist/*.js",
-      "import": "./dist/*.mjs"
+      "require": "./dist/*.cjs",
+      "import": "./dist/*.mjs",
+      "types": "./dist/*.d.mts"
     },
     "./api/*": {
-      "require": "./dist/api/*.js",
-      "import": "./dist/api/*.mjs"
+      "require": "./dist/api/*.cjs",
+      "import": "./dist/api/*.mjs",
+      "types": "./dist/api/*.d.mts"
     },
     "./common": {
-      "require": "./dist/common.js",
-      "import": "./dist/common.mjs"
+      "require": "./dist/common.cjs",
+      "import": "./dist/common.mjs",
+      "types": "./dist/common.d.mts"
     },
     "./unions": {
-      "require": "./dist/unions/index.js",
-      "import": "./dist/unions/index.mjs"
+      "require": "./dist/unions/index.cjs",
+      "import": "./dist/unions/index.mjs",
+      "types": "./dist/unions/index.d.mts"
     },
     "./package.json": "./package.json"
   },
@@ -63,7 +67,7 @@
     "gen:split": "ts-node post-gen/splitter.ts",
     "gen:pack": "ts-node post-gen/pack.ts",
     "fix:lint": "eslint --fix generated/ lib/common/ --ext .ts -c .eslintrc.js",
-    "build": "tsup",
+    "build": "tsdown",
     "rebuild": "pnpm clean && pnpm decompile && pnpm gen:build && pnpm compile",
     "rebuild:win": "pnpm clean && pnpm decompile:win && pnpm gen:build && pnpm compile",
     "compile": "rimraf generated && pnpm gen:generate && pnpm gen:split && pnpm gen:pack && pnpm fix:lint && pnpm build",

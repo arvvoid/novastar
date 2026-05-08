@@ -1,7 +1,7 @@
 import { globSync } from 'glob';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type Options } from 'tsdown';
 
 const entries = Object.fromEntries(
   globSync('generated/**/*.ts').map(file => [
