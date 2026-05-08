@@ -5,7 +5,7 @@ const isLikeNumberArray = (value: unknown): value is ReadonlyArray<number> | Buf
   (Array.isArray(value) && (value.length === 0 || typeof value[0] === 'number'));
 
 const createArgs = (
-  param: Packet | Buffer | ReadonlyArray<number> | number
+  param: Packet | Buffer | ReadonlyArray<number> | number,
 ): [Buffer, true | undefined] => {
   if (isPacket(param)) return [Packet.raw(param), true];
   const raw = Buffer.alloc(Packet.baseSize + (isLikeNumberArray(param) ? param.length : 0));
@@ -74,7 +74,7 @@ export default class Request<Broadcast extends boolean = false> extends Packet {
   constructor(
     param: Packet | Buffer | ReadonlyArray<number> | number,
     param2?: Broadcast | string,
-    param3?: string
+    param3?: string,
   ) {
     super(...createArgs(param));
     const broadcast = typeof param2 === 'boolean' ? param2 : undefined;
@@ -112,7 +112,7 @@ export default class Request<Broadcast extends boolean = false> extends Packet {
    */
   static makeChunks<Broadcast extends boolean = false>(
     req: Request<Broadcast>,
-    maxLength = 256
+    maxLength = 256,
   ): Request<Broadcast>[] {
     if (maxLength <= 0) throw new TypeError(`Invalid maxLength: ${maxLength}`);
     const total = req.originalLength ?? req.length; // req.data.length;
@@ -131,7 +131,7 @@ export default class Request<Broadcast extends boolean = false> extends Packet {
       const chunk = new Request(
         new Packet(buffer),
         req.broadcast,
-        req.tag && `${req.tag}:${i}`
+        req.tag && `${req.tag}:${i}`,
       ) as Request<Broadcast>;
       chunk.timeout = req.timeout;
       chunk.maxLength = maxLength;

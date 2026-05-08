@@ -2,7 +2,7 @@ import NovastarDecoder from './NovastarDecoder';
 import { COMPUTER, Packet, RESPONSE } from './Packet';
 
 describe('NovastarDecoder', () => {
-  it('decode', done => {
+  it('decode', (done) => {
     const data = 'Hello, world!';
     const length = Packet.baseSize + data.length;
     const res = new Packet(Buffer.alloc(length));
@@ -14,7 +14,7 @@ describe('NovastarDecoder', () => {
     const raw = Packet.raw(res);
     Packet.crc(res, true);
     const decoder = new NovastarDecoder();
-    decoder.once('data', chunk => {
+    decoder.once('data', (chunk) => {
       expect(chunk).toEqual(res);
       done();
     });

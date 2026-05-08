@@ -31,7 +31,7 @@ export enum ErrorType {
   RequestCRCError,
   ResponseCRCError,
   UnknownCommand,
-  Invalid = 255
+  Invalid = 255,
 }
 
 /*
@@ -89,7 +89,7 @@ export const Packet = new Struct('Packet')
   .UInt16LE('length')
   .Buffer('data')
   .CRC16LE('crc', {
-    calc: raw => raw.reduce((crc, val) => (crc + val) % 0x10000, 0x5555),
+    calc: (raw) => raw.reduce((crc, val) => (crc + val) % 0x10000, 0x5555),
     start: 2,
   })
   .compile();
@@ -111,7 +111,7 @@ export const Packet = new Struct('Packet')
  * @property crc - cyclic redundancy check
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Packet extends ExtractType<typeof Packet, false> { }
+export interface Packet extends ExtractType<typeof Packet, false> {}
 
 /**
  * [[Packet]] type guard

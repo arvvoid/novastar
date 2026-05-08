@@ -208,10 +208,7 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
     req: Request<boolean>,
     skipErrors?: boolean,
   ): Promise<Packet | null | void> {
-    const {
-      connected,
-      encoder,
-    } = this;
+    const { connected, encoder } = this;
     if (!connected || !encoder) throw new ConnectionClosedError();
     const maxLength = this.getMaxLength(req);
     if (req.length > maxLength)
@@ -219,7 +216,7 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
         `The request size is too large. Use "send" instead of "trySend", maxLength: ${maxLength}`,
       );
     if (!encoder.write(req)) {
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         encoder.once('drain', resolve);
       });
     }
@@ -254,7 +251,7 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
         debug(err.message);
         return reject(err);
       };
-      const resolveResponse: ResolveResponse = res => {
+      const resolveResponse: ResolveResponse = (res) => {
         complete();
         resolve(res);
       };

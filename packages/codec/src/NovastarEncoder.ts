@@ -17,7 +17,7 @@ export default class NovastarEncoder extends Transform {
 
   public _transform(chunk: unknown, encoding: BufferEncoding, callback: TransformCallback): void {
     const chunks = Array.isArray(chunk) ? chunk : [chunk];
-    chunks.forEach(pkg => {
+    chunks.forEach((pkg) => {
       if (pkg instanceof Request) {
         Request.crc(pkg, true);
         const raw = Request.raw(pkg);

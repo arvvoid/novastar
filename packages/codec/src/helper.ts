@@ -25,7 +25,7 @@ function chunkArray<T extends ArrayLike>(array: T, len: number): T[] {
  */
 export function printBuffer(buffer: Buffer): string {
   return chunkArray(chunkArray(buffer.toString('hex'), 2), 16)
-    .map(chunk => chunk.join('-'))
+    .map((chunk) => chunk.join('-'))
     .join('=');
 }
 
@@ -34,7 +34,7 @@ export function printBuffer(buffer: Buffer): string {
  * @param ms
  */
 export const delay = (ms: number): Promise<void> =>
-  new Promise<void>(resolve => {
+  new Promise<void>((resolve) => {
     setTimeout(resolve, ms);
   });
 
@@ -45,15 +45,15 @@ export const delay = (ms: number): Promise<void> =>
  */
 export function series<T, R>(
   array: ReadonlyArray<T>,
-  action: (item: T, index: number, arr: ReadonlyArray<T>, results: ReadonlyArray<R>) => Promise<R>
+  action: (item: T, index: number, arr: ReadonlyArray<T>, results: ReadonlyArray<R>) => Promise<R>,
 ): Promise<R[]> {
   return array.reduce<Promise<R[]>>(
     (acc, item, index) =>
-      acc.then(async items => {
+      acc.then(async (items) => {
         const result = await action(item, index, array, items);
         return [...items, result];
       }),
-    Promise.resolve<R[]>([])
+    Promise.resolve<R[]>([]),
   );
 }
 
