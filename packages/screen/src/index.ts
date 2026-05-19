@@ -1,4 +1,4 @@
-import ScreenConfigurator from './ScreenConfigurator';
+export { default as ScreenConfigurator } from './ScreenConfigurator';
 
 export type { BrightnessRGBV, ScreenReadAsyncGenerator, ScreenWriter } from './ScreenConfigurator';
 export type { DeviceInfo } from './DeviceInfo';
@@ -29,9 +29,7 @@ export { ZoomTypeEnum } from '@novastar/native/ZoomType';
 
 export type { API, SessionAPI } from './Session';
 
-export { default as getScreenLocation } from './getScreenLocation';
+export { getScreenLocation } from './getScreenLocation';
 
 export { default as getCabinetPosition } from './getCabinetPosition';
 export type { CabinetPosition } from './getCabinetPosition';
-
-export default ScreenConfigurator;
