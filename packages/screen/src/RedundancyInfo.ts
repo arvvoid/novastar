@@ -2,7 +2,6 @@ import { SenderRedundancyInfo } from '@novastar/native/SenderRedundancyInfo';
 import { makeStruct } from '@novastar/native/common';
 import { ExtractType, Struct } from 'typed-struct';
 
-
 import { crc16 } from './common';
 
 export const ReduFlag = 'REDU';
@@ -30,11 +29,11 @@ const dataOffset = RedundancyInfo.getOffsetOf('crc') + 2;
 export const decodeRedundancyInfo = (data: Buffer): Required<SenderRedundancyInfo>[] => {
   const { crc: crcInfo, items } = new RedundancyInfo(data).toJSON();
   if (crc16(data.slice(dataOffset), 0) !== crcInfo) throw new Error('Invalid RedundancyInfo crc');
-  return items.map(item => makeStruct(SenderRedundancyInfo, item));
+  return items.map((item) => makeStruct(SenderRedundancyInfo, item));
 };
 
 export const encodeRedundancyInfo = (
-  reduList: ReadonlyArray<Required<SenderRedundancyInfo>>
+  reduList: ReadonlyArray<Required<SenderRedundancyInfo>>,
 ): Buffer => {
   const length = reduList.length * RedundancyItem.baseSize;
   const info = new RedundancyInfo(RedundancyInfo.baseSize + length);

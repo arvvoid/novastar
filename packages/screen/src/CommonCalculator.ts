@@ -17,7 +17,7 @@ export function CaculateShiftUnitNum(
   modTotalPointInTable: number,
   directionType: DataDirectionTypeEnum,
   cabinetRealWidth: number,
-  cabinetRealHeight: number
+  cabinetRealHeight: number,
 ): number {
   return (
     (directionType !== DataDirectionTypeEnum.Horizontal
@@ -58,7 +58,7 @@ export function GetGclkInfoByPartNumPerRef(
   chipType: ChipTypeEnum,
   partNumPerRef: number,
   isPWMModel = true,
-  isGLCK = true
+  isGLCK = true,
 ): GetGclkInfoByPartNumPerRefReturnType {
   switch (chipType) {
     case ChipTypeEnum.Chip_SUM2030:
@@ -718,7 +718,7 @@ export const isValidScanBdProp = hasProps(
   'CommonIrCabinetMode',
   'IsIrRegular',
   'ChipPropey',
-  'SpecialFrameRate'
+  'SpecialFrameRate',
 );
 
 export const isValidStandardLedModuleProp = hasProps('ScreenDriveType');
@@ -779,7 +779,7 @@ const alignGroup = (value: number, screenDriveType: ScreenDriveTypeEnum): number
 export const GetHorizontalCascadeMaxLoad = (
   scanBdProp: Readonly<ScanBoardProperty>,
   maxLoadedPixels: number,
-  maxArea: number
+  maxArea: number,
 ): MaxloadSize => {
   if (!isValidScanBdProp(scanBdProp)) throw new TypeError('Invalid ScanBoardProperty');
   const { StandardLedModuleProp, Height } = scanBdProp;
@@ -811,7 +811,7 @@ export const GetHorizontalCascadeMaxLoad = (
 export const GetVerticalCascadeMaxLoad = (
   scanBdProp: Readonly<ScanBoardProperty>,
   maxLoadedPixels: number,
-  maxArea: number
+  maxArea: number,
 ): MaxloadSize => {
   if (!isValidScanBdProp(scanBdProp)) throw new TypeError('Invalid ScanBoardProperty');
   const { Width, StandardLedModuleProp } = scanBdProp;
@@ -842,7 +842,7 @@ export const GetVerticalCascadeMaxLoad = (
 export const CaculateMaxloadSize = (
   scanBdProp: Readonly<ScanBoardProperty>,
   maxLoadedPixels: number,
-  maxArea: number
+  maxArea: number,
 ): MaxloadSize => {
   switch (scanBdProp.ModCascadeType) {
     case ModuleCascadeDiretionEnum.RightLeft:
@@ -850,7 +850,7 @@ export const CaculateMaxloadSize = (
       const { maxWidth, ...other } = GetHorizontalCascadeMaxLoad(
         scanBdProp,
         maxLoadedPixels,
-        maxArea
+        maxArea,
       );
       return {
         maxWidth: scanBdProp.Height ? Math.min(maxArea / scanBdProp.Height, maxArea) : 0,
@@ -862,7 +862,7 @@ export const CaculateMaxloadSize = (
       const { maxHeight, ...other } = GetVerticalCascadeMaxLoad(
         scanBdProp,
         maxLoadedPixels,
-        maxArea
+        maxArea,
       );
       return {
         maxHeight: scanBdProp.Width ? Math.min(maxArea / scanBdProp.Width, maxArea) : 0,
@@ -877,7 +877,7 @@ export const CaculateMaxloadSize = (
 export const CaculateCutMapAddrIndex = (
   width: number,
   cutRect: Rectangle,
-  pointBytes: number
+  pointBytes: number,
 ): CutMapInfo[] => {
   const cutMapInfoList: CutMapInfo[] = [];
   for (let index = 0; index < cutRect.height; index += 1) {

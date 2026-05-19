@@ -34,7 +34,7 @@ const chipInfo = (
   hasGain: boolean,
   hasPointDetect: boolean,
   channelCount: number,
-  gainSteps?: GainSteps
+  gainSteps?: GainSteps,
 ): ChipInfo => ({
   ChipType,
   isCommon,
@@ -669,7 +669,7 @@ export const DetectPointIsConfigOtherReg = (ChipType: ChipTypeEnum): boolean =>
 
 export const CanManualAdjustRefreshRate = (
   chipType: ChipTypeEnum,
-  scanType: ScanTypeEnum
+  scanType: ScanTypeEnum,
 ): boolean => {
   switch (chipType) {
     case ChipTypeEnum.Chip_MBI5030:

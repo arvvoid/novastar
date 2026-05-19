@@ -34,7 +34,7 @@ export interface NetBindingEvents {
 }
 
 const interfaceSearch = (address: string, dest = '255.255.255.255'): Promise<string[]> =>
-  new Promise<string[]>(resolve => {
+  new Promise<string[]>((resolve) => {
     const socket = dgram.createSocket('udp4');
     let completed = false;
     let timer: NodeJS.Timeout | undefined;
@@ -60,7 +60,7 @@ const interfaceSearch = (address: string, dest = '255.255.255.255'): Promise<str
       socket.addMembership(MULTICAST_ADDRESS, address);
       socket.setMulticastTTL(128);
       timer = setTimeout(complete, UDP_TIMEOUT);
-      socket.send(REQ, UDP_PORT, dest, err => err && complete());
+      socket.send(REQ, UDP_PORT, dest, (err) => err && complete());
       // debug(`start: ${address}`);
     });
   });
@@ -73,11 +73,11 @@ export const findNetDevices = async (dest?: string): Promise<string[]> => {
   const interfaces = Object.values<NetworkInterfaceInfo[] | undefined>(os.networkInterfaces())
     .filter(notEmpty)
     .reduce<NetworkInterfaceInfo[]>((res, values) => [...res, ...values], [])
-    .filter(nic => !nic.internal && nic.family === 'IPv4')
+    .filter((nic) => !nic.internal && nic.family === 'IPv4')
     .map(({ address }) => address);
-  const results = await Promise.all(interfaces.map(address => interfaceSearch(address, dest)));
+  const results = await Promise.all(interfaces.map((address) => interfaceSearch(address, dest)));
   return results.reduce<string[]>(
-    (acc, list) => [...acc, ...list.filter(host => !acc.includes(host))],
+    (acc, list) => [...acc, ...list.filter((host) => !acc.includes(host))],
     [],
   );
 };
@@ -126,13 +126,12 @@ export class NetBinding extends TypedEmitter<NetBindingEvents> {
     const session = new Session(connection);
     this.#sessions[fullAddress] = session;
     let reconnectRequired = true;
-    socket.on('error', err => {
+    socket.on('error', (err) => {
       debug('error %s (%s)', err.message, address);
       const { code } = err as NodeJS.ErrnoException;
-      if (code && ['ECONNREFUSED', 'ECONNRESET'].includes(code))
-        reconnectRequired = false;
+      if (code && ['ECONNREFUSED', 'ECONNRESET'].includes(code)) reconnectRequired = false;
     });
-    socket.on('close', async hadError => {
+    socket.on('close', async (hadError) => {
       connection.close();
       if (hadError && reconnectRequired) {
         debug('try reconnect %s', address);
@@ -174,7 +173,7 @@ export class NetBinding extends TypedEmitter<NetBindingEvents> {
    * Close all network sessions
    */
   release(): void {
-    Object.values(this.sessions).forEach(session => session.close());
+    Object.values(this.sessions).forEach((session) => session.close());
   }
 }
 

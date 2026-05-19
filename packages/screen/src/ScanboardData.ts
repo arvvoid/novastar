@@ -138,7 +138,7 @@ export const ScanboardData = new Struct('ScanboardData')
     'DataGroupSequence',
     DataGroupSequenceStruct.baseSize,
     getDataGroupSequence,
-    setDataGroupSequence
+    setDataGroupSequence,
   )
   .UInt8('ModuleCols')
   .UInt8('ModuleRows')
@@ -158,21 +158,21 @@ export const ScanboardData = new Struct('ScanboardData')
     'Is28DataGroup',
     1,
     (_, [data]) => data === 18,
-    (_, buffer, value) => buffer.writeUInt8(value ? 18 : 0) > 0
+    (_, buffer, value) => buffer.writeUInt8(value ? 18 : 0) > 0,
   )
   .back()
   .Custom(
     'Is24DataGroup',
     1,
     (_, [data]) => data === 2,
-    (_, buffer, value) => buffer.writeUInt8(value ? 2 : 0) > 0
+    (_, buffer, value) => buffer.writeUInt8(value ? 2 : 0) > 0,
   )
   .back()
   .Custom(
     'IsDExtendMode',
     1,
     (_, [data]) => data === 1,
-    (_, buffer, value) => buffer.writeUInt8(value ? 1 : 0) > 0
+    (_, buffer, value) => buffer.writeUInt8(value ? 1 : 0) > 0,
   )
   .UInt8('GrayDepth')
   .Bits8({
@@ -187,7 +187,7 @@ export const ScanboardData = new Struct('ScanboardData')
       buffer.writeUInt16LE(value);
       buffer[1] <<= 1;
       return true;
-    }
+    },
   )
   .UInt8('LineBias')
   .UInt16LE('BlankUnitNumPerScan')
@@ -270,7 +270,7 @@ export const ScanboardData = new Struct('ScanboardData')
     'CabinetRotateAngle',
     1,
     (_, [data]) => <RotateAngleEnum>((data + 3) % 4),
-    (_, buffer, value) => buffer.writeUInt8((value + 1) % 4) > 0
+    (_, buffer, value) => buffer.writeUInt8((value + 1) % 4) > 0,
   )
   .UInt8('GrayEnhanced') // 156
   .UInt16LE('RedNoCorrectionThreshold')
@@ -424,12 +424,12 @@ const hasEnhancedMode = hasProps('EnhancedMode', 'EnhancedModeSwitch');
 const is2033 = hasProps('UsingBright', 'UsingSUM2033Gamma');
 
 const isChip2053ExtendPropety = (
-  chipPropey: ChipBaseExtendPropey
+  chipPropey: ChipBaseExtendPropey,
 ): chipPropey is Chip2053ExtendPropety =>
   (chipPropey as any)['@_xsi:type'] === 'Chip2053ExtendPropety';
 
 const isChip2163ExtendPropety = (
-  chipPropey: ChipBaseExtendPropey
+  chipPropey: ChipBaseExtendPropey,
 ): chipPropey is Chip2163ExtendPropety =>
   (chipPropey as any)['@_xsi:type'] === 'Chip2163ExtendPropety';
 

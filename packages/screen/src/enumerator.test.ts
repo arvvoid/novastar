@@ -9,7 +9,7 @@ import { SessionAPI } from './Session';
 jest.setTimeout(50000);
 
 const delay = (ms: number): Promise<void> =>
-  new Promise(resolve => {
+  new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 

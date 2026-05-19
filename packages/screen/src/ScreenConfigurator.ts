@@ -86,7 +86,7 @@ import { decodeScreenConfig } from './configs';
 import convertLEDDisplayInfoToScreenDataInSoftSpace from './convertLEDDisplayInfoToScreenDataInSoftSpace';
 import convertScreenDataInSoftSpaceToLEDDisplayInfo from './convertScreenDataInSoftSpaceToLEDDisplayInfo';
 import enumerateDevices from './enumerator';
-import getScreenLocation from './getScreenLocation';
+import { getScreenLocation } from './getScreenLocation';
 import packAndSortCabinets from './packAndSortCabinets';
 import splitScreensByDevice from './splitScreensByDevice';
 
@@ -115,7 +115,7 @@ const ScreenDataInSoftSpaceList = t.type({
 type ConsolidatedResult = null | boolean;
 
 const consolidateResults = (results: (ErrorType | null)[]): ConsolidatedResult =>
-  results.every(res => res == null) ? null : results.every(res => res === ErrorType.Succeeded);
+  results.every((res) => res == null) ? null : results.every((res) => res === ErrorType.Succeeded);
 
 export type BrightnessRGBV = {
   overall: number;
@@ -132,7 +132,7 @@ type WriteFunction<T> = (
   PortIndex: number,
   ScanIndex: number,
   broadcast: boolean,
-  value: T
+  value: T,
 ) => Promise<void>;
 
 type ReadNames<T = number | Buffer> = AllowedNames<SessionAPI, ReadFunction<T>>;
@@ -217,29 +217,31 @@ export default class ScreenConfigurator {
    */
   save: () => Promise<void> = this.queue(this.saveImpl);
 
-  ReadHWStatus = this.createReadGenerator('ReadAllStatus', res => new HWStatus(res.data).toJSON());
+  ReadHWStatus = this.createReadGenerator('ReadAllStatus', (res) =>
+    new HWStatus(res.data).toJSON(),
+  );
 
   ReadReceivingCardMCURemarks = this.createReadGenerator(
     'ReadScanner_McuProgramRemarks',
-    stringConverter
+    stringConverter,
   );
 
   ReadReceivingCardFPGARemarks = this.createReadGenerator(
     'ReadScanner_FPGAProgramRemarks',
-    stringConverter
+    stringConverter,
   );
 
   ReadChipType = this.createReadGenerator('ReadDriverType', decodeUIntLE);
 
   ReadFirstChipType = firstCreator(this.ReadChipType);
 
-  WriteBrightness = this.createWriter('SetGlobalBrightness', percent =>
-    Math.ceil((minimax(0, 100, percent) * 255) / 100)
+  WriteBrightness = this.createWriter('SetGlobalBrightness', (percent) =>
+    Math.ceil((minimax(0, 100, percent) * 255) / 100),
   );
 
   ReadBrightness = this.createReadGenerator(
     'ReadGlobalBrightness',
-    res => Math.round((decodeUIntLE(res) * 10000) / 255) / 100
+    (res) => Math.round((decodeUIntLE(res) * 10000) / 255) / 100,
   );
 
   ReadFirstBrightness = firstCreator(this.ReadBrightness);
@@ -250,11 +252,11 @@ export default class ScreenConfigurator {
 
   ReadFirstDisplayMode = firstCreator(this.ReadDisplayMode);
 
-  ReadGamma = this.createReadGenerator('ReadGamma', res => decodeUIntLE(res) / 10);
+  ReadGamma = this.createReadGenerator('ReadGamma', (res) => decodeUIntLE(res) / 10);
 
   ReadFirstGamma = firstCreator(this.ReadGamma);
 
-  ReadRGBVBrightness = this.createReadGenerator('ReadAllBrightnessInfo', res => {
+  ReadRGBVBrightness = this.createReadGenerator('ReadAllBrightnessInfo', (res) => {
     const [overall, red, green, blue, vRed] = res.data;
     return {
       overall,
@@ -267,7 +269,7 @@ export default class ScreenConfigurator {
 
   ReadFirstRGBVBrightness = firstCreator(this.ReadRGBVBrightness);
 
-  WriteGamma = this.createWriter('SetGamma', gamma => (gamma * 10) & 0xff);
+  WriteGamma = this.createWriter('SetGamma', (gamma) => (gamma * 10) & 0xff);
 
   ReadFirstFuncCardLightSensor = firstCreator(this.ReadAllFuncCardLightSensor.bind(this));
 
@@ -332,7 +334,7 @@ export default class ScreenConfigurator {
    */
   GetScreenAllPort(
     screen: number,
-    toRead = false
+    toRead = false,
   ): {
     SenderIndex: number;
     PortIndex: number;
@@ -355,10 +357,10 @@ export default class ScreenConfigurator {
       ({ SenderIndex, PortIndex, MinConnectIndex, LoadScannerCount }) => {
         const { SlaveSenderIndex, SlavePortIndex } =
           this.reduList.find(
-            item => item.MasterPortIndex === PortIndex && item.MasterSenderIndex === SenderIndex
+            (item) => item.MasterPortIndex === PortIndex && item.MasterSenderIndex === SenderIndex,
           ) ?? {};
         return toRead
-          ? range(MinConnectIndex, MinConnectIndex + LoadScannerCount).map(ScanIndex => ({
+          ? range(MinConnectIndex, MinConnectIndex + LoadScannerCount).map((ScanIndex) => ({
               SenderIndex,
               PortIndex,
               SlaveSenderIndex,
@@ -372,7 +374,7 @@ export default class ScreenConfigurator {
               SlavePortIndex,
               ScanIndex: 0xffff,
             };
-      }
+      },
     );
 
     return toRead ? list.filter(({ SenderIndex }) => SenderIndex !== AllSenders) : list;
@@ -380,7 +382,7 @@ export default class ScreenConfigurator {
 
   async WriteRGBVBrightness(
     { overall, red, green, blue, vRed }: BrightnessRGBV,
-    screen = 0
+    screen = 0,
   ): Promise<null | boolean> {
     const addresses = this.GetScreenAllPort(screen);
     const value = Buffer.from([overall, red, green, blue, vRed]);
@@ -394,7 +396,7 @@ export default class ScreenConfigurator {
       await this.session.connection.send(req);
       return true;
     }
-    const results = await series(addresses, async address => {
+    const results = await series(addresses, async (address) => {
       const req = new Request(value);
       req.address = AddressMapping.AllBrightnessInfoAddr;
       req.deviceType = DeviceType.ReceivingCard;
@@ -433,7 +435,7 @@ export default class ScreenConfigurator {
   }
 
   async *ReadAllFuncCardLightSensor(): AsyncGenerator<number | null> {
-    const { portCount = 2 } = this.devices[0] ?? [];
+    const { portCount = 4 } = this.devices[0] ?? [];
     for (let PortIndex = 0; PortIndex < portCount; PortIndex += 1) {
       yield this.ReadFuncCardLightSensor(0, PortIndex, 0);
     }
@@ -442,7 +444,7 @@ export default class ScreenConfigurator {
   protected async readFuncCardLightSensorImpl(
     senderIndex = 0,
     portIndex = 0,
-    cardIndex = 0
+    cardIndex = 0,
   ): Promise<number | null> {
     const data = Buffer.from([
       cardIndex,
@@ -481,15 +483,15 @@ export default class ScreenConfigurator {
 
   protected createReadGenerator<N extends ReadNames, T>(
     name: N,
-    decoder: (res: Packet) => T
+    decoder: (res: Packet) => T,
   ): ScreenReadAsyncGenerator<T> {
     return {
       async *[name](this: ScreenConfigurator, screen = 0): AsyncGenerator<Awaited<T> | null> {
         const addresses = this.GetScreenAllPort(screen, true);
         for (const address of addresses) {
           const { SenderIndex, PortIndex, ScanIndex } = address;
-          yield this.session[`try${name}`](SenderIndex, PortIndex, ScanIndex).then(res =>
-            !res || res.ack !== 0 ? null : decoder(res)
+          yield this.session[`try${name}`](SenderIndex, PortIndex, ScanIndex).then((res) =>
+            !res || res.ack !== 0 ? null : decoder(res),
           );
         }
       },
@@ -498,7 +500,7 @@ export default class ScreenConfigurator {
 
   protected createWriter<N extends FilterHasTry<SessionAPI>[WriteNames], I = ValueTypeFromName<N>>(
     name: N,
-    encoder: Codec<I, ValueTypeFromName<N>> = identity
+    encoder: Codec<I, ValueTypeFromName<N>> = identity,
   ): ScreenWriter<I> {
     return {
       async [name](this: ScreenConfigurator, value: I, screen = -1): Promise<ConsolidatedResult> {
@@ -506,10 +508,11 @@ export default class ScreenConfigurator {
         // debug(`addresses: ${JSON.stringify(addresses)}`);
         const val = encoder(value) as never;
         const results = await series(addresses, async ({ SenderIndex, PortIndex, ScanIndex }) => {
-          if (name === 'SetGlobalBrightness') { 
+          if (name === 'SetGlobalBrightness') {
             try {
               await this.session[`${name}`](SenderIndex, PortIndex, ScanIndex, true, val);
             } catch (err) {
+              console.error(`Failed to set brightness for sender ${SenderIndex} port ${PortIndex}:`, err);
               return null;
             }
             return null;
@@ -522,7 +525,7 @@ export default class ScreenConfigurator {
   }
 
   protected queue<A, R>(
-    func: (this: ScreenConfigurator, ...args: A[]) => Promise<R>
+    func: (this: ScreenConfigurator, ...args: A[]) => Promise<R>,
   ): (...args: A[]) => Promise<R> {
     return (...args) =>
       new Promise((resolve, reject) => {
@@ -540,7 +543,7 @@ export default class ScreenConfigurator {
     this.reset();
     this.#devices = await enumerateDevices(this.session);
     debug(`devices: ${JSON.stringify(this.devices)}`);
-    if (this.devices.length > 1) throw new Error('An unexpected number of devices!');
+    // if (this.devices.length > 1) throw new Error('An unexpected number of devices!');
     await series(this.devices, async ({ maxPackageSize, model }, index): Promise<void> => {
       if (!IsSystemController(model)) return;
       this.session.connection.maxLength = maxPackageSize;
@@ -565,7 +568,7 @@ export default class ScreenConfigurator {
       await this.session.SetSender_ScreenConfigFlagSpace(index, false, [85, 0]);
     });
     const items = splitScreensByDevice(
-      this.screens.map(convertLEDDisplayInfoToScreenDataInSoftSpace)
+      this.screens.map(convertLEDDisplayInfoToScreenDataInSoftSpace),
     );
     if (items.length !== this.devices.length) throw new Error('Invalid number of devices');
     // NewSoftSpaceBasicAccessor::CompressFile
@@ -573,7 +576,7 @@ export default class ScreenConfigurator {
       const src = JSON.stringify(
         ScreenDataInSoftSpaceList.encode({
           ScreenDataInSoftSpace: screens,
-        })
+        }),
       );
       const [props, fileCompressDataArea] = await pack(src);
       const info: FileInfoObject = {
@@ -589,7 +592,7 @@ export default class ScreenConfigurator {
       const srcInfo = Buffer.from(
         JSON.stringify({
           SectionFormat: [info],
-        })
+        }),
       );
       const [infoProps, fileInfoCompressDataArea] = await pack(srcInfo);
       const nonCompressDataArea = Buffer.alloc(ParamSize);
@@ -622,7 +625,7 @@ export default class ScreenConfigurator {
       false,
       data,
       data.length,
-      SoftwareSpaceBaseAddress.REDUNDANCY_BASE_ADDRESS
+      SoftwareSpaceBaseAddress.REDUNDANCY_BASE_ADDRESS,
     );
   }
 
@@ -633,7 +636,7 @@ export default class ScreenConfigurator {
     isSmartNoSend = true,
     senderIndex = 255,
     portIndex = 255,
-    scanBdIndex = 0xffff
+    scanBdIndex = 0xffff,
   ): Promise<void> {
     if (!isValidScanBdProp(scanBdProperty)) throw new TypeError('Invalid ScanBoardProperty');
     const copy = { ...scanBdProperty };
@@ -648,7 +651,7 @@ export default class ScreenConfigurator {
         portIndex,
         scanBdIndex,
         false,
-        TestModeEnum.ParaFreeze
+        TestModeEnum.ParaFreeze,
       );
       await delay(1000);
     }
@@ -658,14 +661,14 @@ export default class ScreenConfigurator {
       await delay(100);
     }
     const autoRefreshRates = GetAutoRefreshRateBytesSeq(
-      SetVariousScanBdRefreshRate(scanBdProperty, isSmartMode)
+      SetVariousScanBdRefreshRate(scanBdProperty, isSmartMode),
     );
     await this.session.SetScanner_AutoRefreshRate(
       senderIndex,
       portIndex,
       scanBdIndex,
       false,
-      autoRefreshRates
+      autoRefreshRates,
     );
     const smartMode = GetSmartMode(isSmartMode, ScreenDriveType, DriverChipType);
     await this.session.SetSmartSetMode(senderIndex, portIndex, scanBdIndex, false, smartMode);
@@ -703,17 +706,18 @@ export default class ScreenConfigurator {
       await this.session.ReadSender_SoftwareSpace(
         index,
         RedundancyInfo.baseSize,
-        SoftwareSpaceBaseAddress.REDUNDANCY_BASE_ADDRESS
-      )
+        SoftwareSpaceBaseAddress.REDUNDANCY_BASE_ADDRESS,
+      ),
     );
     debug(`redundancyHeader: ${info.header} (${info.length})`);
     if (info.header !== ReduFlag || info.length === 0) return;
     const data = await this.session.ReadSender_SoftwareSpace(
       index,
       RedundancyInfo.baseSize + info.length,
-      SoftwareSpaceBaseAddress.REDUNDANCY_BASE_ADDRESS
+      SoftwareSpaceBaseAddress.REDUNDANCY_BASE_ADDRESS,
     );
-    this.#reduList = decodeRedundancyInfo(data);
+    const reduList = decodeRedundancyInfo(data);
+    this.#reduList = index === 0 ? reduList : this.#reduList.concat(reduList);
     debug(`redundancy: ${JSON.stringify(this.reduList)}`);
   }
 
@@ -721,7 +725,7 @@ export default class ScreenConfigurator {
     const data = await this.session.ReadSender_SoftwareSpace(
       index,
       ModulationInfoHeader.baseSize,
-      SoftwareSpaceBaseAddress.MODULATION_BASE_ADDRESS
+      SoftwareSpaceBaseAddress.MODULATION_BASE_ADDRESS,
     );
     const header = new ModulationInfoHeader(data);
     if (header.header !== SenderModulationFlag || header.length === 0) return;
@@ -729,9 +733,10 @@ export default class ScreenConfigurator {
     const buf = await this.session.ReadSender_SoftwareSpace(
       0,
       total,
-      SoftwareSpaceBaseAddress.MODULATION_BASE_ADDRESS
+      SoftwareSpaceBaseAddress.MODULATION_BASE_ADDRESS,
     );
-    this.#modulations = decodeModulationInfo(buf);
+    const modulations = decodeModulationInfo(buf);
+    this.#modulations = index === 0 ? modulations : this.#modulations.concat(modulations);
     debug(`modulations: ${JSON.stringify(this.modulations)}`);
   }
 
@@ -742,7 +747,7 @@ export default class ScreenConfigurator {
       false,
       data,
       data.length,
-      SoftwareSpaceBaseAddress.MODULATION_BASE_ADDRESS
+      SoftwareSpaceBaseAddress.MODULATION_BASE_ADDRESS,
     );
   }
 
@@ -751,7 +756,7 @@ export default class ScreenConfigurator {
     const spaceHeader = await this.session.ReadSender_SoftwareSpace(
       index,
       512, // HEADER_LENGTH
-      SoftwareSpaceBaseAddress.BASE_ADDRESS
+      SoftwareSpaceBaseAddress.BASE_ADDRESS,
     );
     /**
      * ScreenInfoAccessor::OnReadSpaceTypeCompleted
@@ -774,15 +779,15 @@ export default class ScreenConfigurator {
    * Nova.GigabitController.FrmSysConfigMode
    */
   private async SetScreenALLWidth(): Promise<boolean | null> {
-    const results = await series(this.screens, scr => {
+    const results = await series(this.screens, (scr) => {
       const location = getScreenLocation(scr);
       const senders = GetScreenSenderAddrInfo(scr);
       return series(senders, ({ SenderIndex }) =>
         this.session.trySetSenderVideoEnclosingMode(
           SenderIndex,
           location.rightBottom.x,
-          location.rightBottom.y
-        )
+          location.rightBottom.y,
+        ),
       );
     });
     return consolidateResults(results.flat(1));
@@ -797,10 +802,10 @@ export default class ScreenConfigurator {
     const data = await this.session.ReadSender_SoftwareSpace(
       index,
       DviScreenConfigInfo.baseSize + dviInfoLength + screenInfoLength + adjustInfoLength,
-      SoftwareSpaceBaseAddress.BASE_ADDRESS
+      SoftwareSpaceBaseAddress.BASE_ADDRESS,
     );
     const { screens, dviVersion, dviInfo, dviExtends } = decodeScreenConfig(data);
-    this.#screens = screens;
+    this.#screens = index === 0 ? screens : this.#screens.concat(screens);
     this.#dviVersion = dviVersion;
     this.#dviInfo = dviInfo;
     this.#dviExtends = dviExtends;
@@ -851,7 +856,7 @@ export default class ScreenConfigurator {
           const getRow = (row: number) =>
             minimax(0, ScanBdRows, isTopConnection(ConnectType) ? row : ScanBdRows - row);
           const rowsPerPort = CabinetsPerPort / ScanBdCols;
-          ports = range(portCount).map<PortScanBoardInfo>(PortIndex => {
+          ports = range(portCount).map<PortScanBoardInfo>((PortIndex) => {
             const extremes = [
               getRow(PortIndex * rowsPerPort),
               getRow((PortIndex + 1) * rowsPerPort),
@@ -871,7 +876,7 @@ export default class ScreenConfigurator {
           const getCol = (col: number) =>
             minimax(0, ScanBdCols, isLeftConnection(ConnectType) ? col : ScanBdCols - col);
           const colsPerPort = CabinetsPerPort / ScanBdRows;
-          ports = range(portCount).map<PortScanBoardInfo>(PortIndex => {
+          ports = range(portCount).map<PortScanBoardInfo>((PortIndex) => {
             const extremes = [
               getCol(PortIndex * colsPerPort),
               getCol((PortIndex + 1) * colsPerPort),
@@ -886,7 +891,7 @@ export default class ScreenConfigurator {
             });
           });
         }
-        this.#screens = [
+        const screens = [
           makeStruct(SimpleLEDDisplayInfo, {
             Type: LEDDisplyTypeEnum.SimpleSingleType,
             PixelColsInScanBd,
@@ -902,6 +907,7 @@ export default class ScreenConfigurator {
             PortScanBdInfoList: ports,
           }),
         ];
+        this.#screens = index === 0 ? screens : this.#screens.concat(screens);
         break;
       }
       case 3: {
@@ -948,12 +954,12 @@ export default class ScreenConfigurator {
     const fileInfoCompressData = await this.ReadData(
       index,
       FileInfoCompressedAddress,
-      ss.compressedSize
+      ss.compressedSize,
     );
     if (ss.fileInfoCRC !== crc16(fileInfoCompressData, 0x55aa))
       throw new Error('FileInfoCRC error');
     const fileInfoListV = FileInfoObjectList.decode(
-      JSON.parse(await unpack(paramData.slice(2), ss.fileInfoSize, fileInfoCompressData))
+      JSON.parse(await unpack(paramData.slice(2), ss.fileInfoSize, fileInfoCompressData)),
     );
     if (isLeft(fileInfoListV))
       throw new Error(`Invalid fileInfoList: ${PathReporter.report(fileInfoListV)}`);
@@ -973,10 +979,12 @@ export default class ScreenConfigurator {
         // console.log('screenList:', inspect(screenListV.right, false, null));
         return packAndSortCabinets(screenListV.right.ScreenDataInSoftSpace, index);
       })
-    ).flat(1);
+    )
+      .flat(1)
+      .map(convertScreenDataInSoftSpaceToLEDDisplayInfo);
 
     // console.log('packed:', screensByDevices.length, inspect(screensByDevices, false, null));
-    this.#screens = screens.map(convertScreenDataInSoftSpaceToLEDDisplayInfo);
+    this.#screens = index === 0 ? screens : this.#screens.concat(screens);
     debug(`screens: ${JSON.stringify(this.screens)}`);
     // console.log('screens:', inspect(this.#screens, false, null));
     // this.screens.forEach((screen, i) => {

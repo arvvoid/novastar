@@ -3,7 +3,6 @@ import { isLeft } from 'fp-ts/Either';
 import { PathReporter } from 'io-ts/PathReporter';
 import { ExtractType, Struct } from 'typed-struct';
 
-
 import { crc16 } from './common';
 
 export const DVIInfo = new Struct('DVIInfo')

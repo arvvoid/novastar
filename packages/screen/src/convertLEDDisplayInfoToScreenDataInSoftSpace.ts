@@ -16,7 +16,7 @@ import { isComplexScreen, isSimpleScreen, isStandardScreen, LEDDisplayInfo } fro
  */
 export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
   scr: LEDDisplayInfo,
-  index: number
+  index: number,
 ): ScreenDataInSoftSpace {
   const UUID = uuid();
   if (isSimpleScreen(scr)) {
@@ -34,7 +34,7 @@ export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
       CabinetRow: scr.ScanBdRows,
       CabinetWidth: scr.PixelColsInScanBd,
       CabinetHeight: scr.PixelRowsInScanBd,
-      OnePortLoadInfo: scr.PortScanBdInfoList?.map(port =>
+      OnePortLoadInfo: scr.PortScanBdInfoList?.map((port) =>
         makeStruct(OnePortLoadInfo, {
           LineType: port.ConnectType,
           Port: port.PortIndex,
@@ -42,7 +42,7 @@ export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
           StartCabRow: port.ScanBdBegRowNo,
           EndCabCol: port.ScanBdEndColNo,
           EndCabRow: port.ScanBdEndRowNo,
-        })
+        }),
       ),
     });
   }
@@ -64,7 +64,7 @@ export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
       CabinetRow: scr.ScanBoardRows,
       DVIlist: scr.DVIOffest,
       DviSelect: first?.DviSelect ?? DviSelectModeEnum.DVI,
-      CabinetInDevice: scr.ScannerRegionList?.map(region =>
+      CabinetInDevice: scr.ScannerRegionList?.map((region) =>
         makeStruct(CabinetInDevice, {
           DevID: region.SenderIndex,
           NetPort: region.PortIndex,
@@ -76,7 +76,7 @@ export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
           RowIndexInScreen: region.RowIndexInScreen,
           ColIndexInScreen: region.ColIndexInScreen,
           DviIndex: region.DVIIndex,
-        })
+        }),
       ),
     });
   }
@@ -86,7 +86,7 @@ export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
       ScreenIndex: index,
       ScrType: LEDDisplyTypeEnum.ComplexType,
       VirMode: scr.VirtualMode,
-      CabinetInDevice: scr.ScanBoardRegionInfoList?.map(region =>
+      CabinetInDevice: scr.ScanBoardRegionInfoList?.map((region) =>
         makeStruct(CabinetInDevice, {
           DevID: region.SenderIndex,
           NetPort: region.PortIndex,
@@ -95,7 +95,7 @@ export default function convertLEDDisplayInfoToScreenDataInSoftSpace(
           YPos: region.Y,
           Width: region.Width,
           Height: region.Height,
-        })
+        }),
       ),
     });
   }

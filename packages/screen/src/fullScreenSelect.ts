@@ -5,7 +5,7 @@
 import { Point } from '@novastar/native/common';
 
 import { isComplexScreen, isSimpleScreen, isStandardScreen, LEDDisplayInfo } from './common';
-import getScreenLocation, { notEmptyXY } from './getScreenLocation';
+import { getScreenLocation, notEmptyXY } from './getScreenLocation';
 
 export type Rectangle = Point & {
   width: number;
@@ -31,14 +31,14 @@ export const fullScreenSelect = (screen: LEDDisplayInfo): ScanBoardSelectedAreaI
   const { leftTop } = getScreenLocation(screen);
   if (isStandardScreen(screen)) {
     return screen.ScannerRegionList.filter(notEmptyXY)
-      .filter(sbInfo => sbInfo.SenderIndex !== 255)
-      .map(sbInfo => ({
+      .filter((sbInfo) => sbInfo.SenderIndex !== 255)
+      .map((sbInfo) => ({
         SelectedRectInSB: [{ x: 0, y: 0, width: sbInfo.Width, height: sbInfo.Height }],
         SelectedSbPosInScreen: { x: sbInfo.X - leftTop.x, y: sbInfo.Y - leftTop.y },
       }));
   }
   if (isComplexScreen(screen)) {
-    return screen.ScanBoardRegionInfoList.filter(notEmptyXY).map(sbInfo => ({
+    return screen.ScanBoardRegionInfoList.filter(notEmptyXY).map((sbInfo) => ({
       SelectedRectInSB: [{ x: 0, y: 0, width: sbInfo.Width, height: sbInfo.Height }],
       SelectedSbPosInScreen: { x: sbInfo.X - leftTop.x, y: sbInfo.Y - leftTop.y },
     }));

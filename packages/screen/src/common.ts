@@ -80,7 +80,7 @@ export const pack = async (data: Buffer | string): Promise<[string, Buffer]> => 
 };
 
 export const isHorizontalConnection = (
-  connectType: ScanBoardConnectTypeEnum
+  connectType: ScanBoardConnectTypeEnum,
 ): connectType is
   | ScanBoardConnectTypeEnum.LeftTop_Horizontal
   | ScanBoardConnectTypeEnum.LeftBottom_Horizontal
@@ -92,7 +92,7 @@ export const isHorizontalConnection = (
   connectType === ScanBoardConnectTypeEnum.RightBottom_Horizontal;
 
 export const isTopConnection = (
-  connectType: ScanBoardConnectTypeEnum
+  connectType: ScanBoardConnectTypeEnum,
 ): connectType is
   | ScanBoardConnectTypeEnum.LeftTop_Horizontal
   | ScanBoardConnectTypeEnum.RightTop_Horizontal
@@ -104,7 +104,7 @@ export const isTopConnection = (
   connectType === ScanBoardConnectTypeEnum.RightTop_Vertical;
 
 export const isLeftConnection = (
-  connectType: ScanBoardConnectTypeEnum
+  connectType: ScanBoardConnectTypeEnum,
 ): connectType is
   | ScanBoardConnectTypeEnum.LeftTop_Horizontal
   | ScanBoardConnectTypeEnum.LeftTop_Vertical
@@ -143,7 +143,7 @@ export const hasProps =
 const zipProps =
   <K extends string>(props: K[]) =>
   <T extends Record<K, number>>(item: T): string =>
-    props.map(name => item[name]).join(':');
+    props.map((name) => item[name]).join(':');
 
 const unzipProps = <K extends string>(props: K[], key: string): Record<K, number> =>
   key
@@ -154,14 +154,14 @@ const unzipProps = <K extends string>(props: K[], key: string): Record<K, number
         ...acc,
         [props[i]]: value,
       }),
-      {} as Record<K, number>
+      {} as Record<K, number>,
     );
 
 export const groupByProps =
   <K extends string>(...props: K[]) =>
   <T extends Record<K, number>>(list: T[]): [Record<K, number>, [T, ...T[]]][] =>
     Object.entries(groupBy(list, zipProps(props))).map<[Record<K, number>, [T, ...T[]]]>(
-      ([key, items]) => [unzipProps(props, key), items as unknown as [T, ...T[]]]
+      ([key, items]) => [unzipProps(props, key), items as unknown as [T, ...T[]]],
     );
 
 export const itFirstNotNull = async <T>(it: AsyncIterable<T | null>): Promise<T | null> => {

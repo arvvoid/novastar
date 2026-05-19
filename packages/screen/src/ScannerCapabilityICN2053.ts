@@ -46,7 +46,7 @@ export default class ScannerCapabilityICN2053 extends ScannerCapabilitySUM2030 {
         TotalPointInTable,
         DataDirectType,
         Width,
-        Height
+        Height,
       );
       if (StandardLedModuleProp.ScreenDriveType === ScreenDriveTypeEnum.Serial)
         this._shiftNumPerSubField *= StandardLedModuleProp.SerialColorNum;
@@ -67,7 +67,7 @@ export default class ScannerCapabilityICN2053 extends ScannerCapabilitySUM2030 {
     scanBdProperty.RefNumPerVs = this.CaculateAllParameters(chipType, partNumPerRef, blackTime);
     scanBdProperty.GrayDepth = GetGrayScaleByGclkNumPerRef(
       this._gclkNumPerRef -
-        (chipType === ChipTypeEnum.Chip_ICN2050 || chipType === ChipTypeEnum.Chip_ICN2053 ? 1 : 0)
+        (chipType === ChipTypeEnum.Chip_ICN2050 || chipType === ChipTypeEnum.Chip_ICN2053 ? 1 : 0),
     );
     scanBdProperty.TotalGclkUnitNumPerScan = this._totalGclkUintNumPerScan;
     return true;
@@ -76,7 +76,7 @@ export default class ScannerCapabilityICN2053 extends ScannerCapabilitySUM2030 {
   private CaculateAllParameters(
     chipType: ChipTypeEnum,
     partNumPerRef: number,
-    blackTime: number
+    blackTime: number,
   ): number {
     const num = 125 * (this._fieldPeriod - this._fieldWaitTime) * 1000;
     const num2 =
@@ -87,7 +87,7 @@ export default class ScannerCapabilityICN2053 extends ScannerCapabilitySUM2030 {
       GetGclkInfoByPartNumPerRef(chipType, partNumPerRef);
     this._totalUnitNumPerSubField = Math.floor(
       (((num - num2) / this._scanCount - num3) / 16 - (this._m1TranCntNum + 1) - 1) /
-        this._dclkUnitCycle
+        this._dclkUnitCycle,
     );
     if (
       this._scanCount === 1 &&
@@ -127,7 +127,7 @@ export default class ScannerCapabilityICN2053 extends ScannerCapabilitySUM2030 {
         (num - num5) / this._refNumPerVs - this._gclkUnitCycle - (this._m2TranCntNum + 1) - 1;
       this._totalGclkUintNumPerScan = Math.floor(
         (num10 / this._scanCount - 2 * (this._m2TranCntNum + 1) - 2) / this._gclkUnitCycle -
-          this._blackingTime
+          this._blackingTime,
       );
       this._gclkNumPerRef = this._refNumPerVs * validGclkNumPerScan;
       const num18 = num - (48 - 1 - 4) * this._dclkUnitCycle;

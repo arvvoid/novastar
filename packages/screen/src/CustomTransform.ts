@@ -9,7 +9,7 @@ import { ScreenDriveTypeEnum } from '@novastar/native/ScreenDriveType';
 export const GetSmartMode = (
   isSmartMode: boolean,
   screenDriverType: ScreenDriveTypeEnum,
-  chipType: ChipTypeEnum
+  chipType: ChipTypeEnum,
 ): number => {
   if (!isSmartMode) return 0;
   if (chipType === ChipTypeEnum.Chip_MBI5359 || chipType === ChipTypeEnum.Chip_MBI5353) return 1;

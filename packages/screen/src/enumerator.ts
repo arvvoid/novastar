@@ -33,7 +33,7 @@ async function readDeviceInfo(session: SessionAPI, index: number): Promise<Devic
     const deviceInfo: DeviceInfo = {
       model: await session.ReadControllerModelId(index),
       mac: [...(await session.ReadControllerSnHigh(index))]
-        .map(byte => byte.toString(16).padStart(2, '0'))
+        .map((byte) => byte.toString(16).padStart(2, '0'))
         .join(':'),
       maxPackageSize: await readMaxPackageSize(session, index),
       companyId: await session.ReadCompanyID(index),

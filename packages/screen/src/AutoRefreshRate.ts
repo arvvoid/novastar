@@ -12,7 +12,7 @@ export const AutoRefreshRate = new Struct('AutoRefreshRate')
       buf.writeUInt16LE(value);
       buf[1] <<= 1;
       return true;
-    }
+    },
   )
   .UInt8('GCLKRate')
   .Custom(
@@ -22,7 +22,7 @@ export const AutoRefreshRate = new Struct('AutoRefreshRate')
     (_, buf, value) => {
       buf[0] = value ? 85 : 0;
       return true;
-    }
+    },
   )
   .UInt8('M1TranCntNum')
   .UInt8('M2TranCntNum')

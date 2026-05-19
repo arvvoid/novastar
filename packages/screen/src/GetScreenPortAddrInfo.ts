@@ -18,7 +18,7 @@ const notEmptySenderPort = hasProps(...GroupKeys);
 export default function GetScreenPortAddrInfo(scr: LEDDisplayInfo) {
   if (isSimpleScreen(scr)) {
     const { PortCols = 0, PortRows = 0, PortScanBdInfoList = [] } = scr;
-    return range(PortCols * PortRows).map(index => {
+    return range(PortCols * PortRows).map((index) => {
       const {
         ScanBdBegColNo = 0,
         ScanBdEndColNo = 0,

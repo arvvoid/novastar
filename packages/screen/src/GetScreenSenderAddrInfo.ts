@@ -14,6 +14,6 @@ export default function GetScreenSenderAddrInfo(scr: LEDDisplayInfo) {
     makeStruct(ScreenPortAddrInfo, {
       ...index,
       LoadScannerCount: sumBy(items, 'LoadScannerCount'),
-    })
+    }),
   );
 }

@@ -12,7 +12,7 @@ export type Location = {
 };
 export const notEmptyXY = hasProps('X', 'Y', 'Width', 'Height');
 
-export default function getScreenLocation(screen: LEDDisplayInfo): Location {
+export function getScreenLocation(screen: LEDDisplayInfo): Location {
   if (isSimpleScreen(screen)) {
     const cols = screen?.ScanBdCols ?? 0;
     const rows = screen?.ScanBdRows ?? 0;
@@ -60,30 +60,27 @@ export default function getScreenLocation(screen: LEDDisplayInfo): Location {
   const top = Math.max(0, yy[0].Y);
   const right = Math.max(0, xLast.X + xLast.Width);
   const bottom = Math.max(0, yLast.Y + yLast.Height);
-  const [uniqX, uniqY] = xy.reduce((
-    [xSet, ySet],
-    {
-      X,
-      Y,
-    }) => {
-    xSet.add(X);
-    ySet.add(Y);
-    return [xSet, ySet];
-  }, [new Set<number>(), new Set<number>()]);
+  const [uniqX, uniqY] = xy.reduce(
+    ([xSet, ySet], { X, Y }) => {
+      xSet.add(X);
+      ySet.add(Y);
+      return [xSet, ySet];
+    },
+    [new Set<number>(), new Set<number>()],
+  );
   const firstColumn = xx[0].ColIndexInScreen;
   const lastColumn = xLast.ColIndexInScreen;
   const firstRow = xx[0].RowIndexInScreen;
   const lastRow = xLast.RowIndexInScreen;
-  const [cols, rows] = isStandardScreen(screen) && screen.ScanBoardCols && screen.ScanBoardRows
-    ? [screen.ScanBoardCols, screen.ScanBoardRows]
-    : [
-      lastColumn != null && firstColumn != null
-        ? Math.max(lastColumn - firstColumn + 1, 0)
-        : uniqX.size,
-      lastRow != null && firstRow != null
-        ? Math.max(lastRow - firstRow + 1, 0)
-        : uniqY.size,
-    ];
+  const [cols, rows] =
+    isStandardScreen(screen) && screen.ScanBoardCols && screen.ScanBoardRows
+      ? [screen.ScanBoardCols, screen.ScanBoardRows]
+      : [
+          lastColumn != null && firstColumn != null
+            ? Math.max(lastColumn - firstColumn + 1, 0)
+            : uniqX.size,
+          lastRow != null && firstRow != null ? Math.max(lastRow - firstRow + 1, 0) : uniqY.size,
+        ];
 
   return {
     leftTop: {

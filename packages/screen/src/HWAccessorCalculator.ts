@@ -96,7 +96,7 @@ export const GetRateFromRateType = (rateType: AutoAdjustRefreshRateTypeEnum): nu
 
 export const CheckIsModeSupport = (
   scanBdProperty: Readonly<ScanBoardProperty>,
-  fieldRate: number
+  fieldRate: number,
 ): [boolean, ScanBoardProperty] => {
   if (!isValidScanBdProp(scanBdProperty)) throw new TypeError('Invalid ScanBoardProperty');
   const { StandardLedModuleProp, Width, Height } = scanBdProperty;
@@ -112,7 +112,7 @@ export const CheckIsModeSupport = (
   const { maxWidth, maxHeight } = CaculateMaxloadSize(
     result,
     scanBoardCapability.MaxLoadedPixels / k,
-    MaxValue.MAX_SCANNER_AREA
+    MaxValue.MAX_SCANNER_AREA,
   );
   result.TotalUnitNum = scanBoardCapability.TotalUnitNumPerSubField;
   result.TotalGclkUnitNumPerScan = scanBoardCapability.TotalGclkUnitNumPerScan;
@@ -123,7 +123,7 @@ export const CheckIsModeSupport = (
 
 export const SetVariousScanBdRefreshRate = (
   scanBdProperty: Readonly<ScanBoardProperty>,
-  isSmartMode: boolean
+  isSmartMode: boolean,
 ): ReadonlyArray<Required<AutoAdjustRefreshRateParameters>> => {
   const { StandardLedModuleProp: { DriverChipType: chipType, ScanType: scanType } = {} } =
     scanBdProperty;
@@ -132,7 +132,7 @@ export const SetVariousScanBdRefreshRate = (
   return Object.values(AutoAdjustRefreshRateTypeEnum)
     .map(Number)
     .filter<AutoAdjustRefreshRateTypeEnum>(notEmpty)
-    .map(rateType => {
+    .map((rateType) => {
       let prop: ScanBoardProperty | undefined;
       const rateFromRateType = GetRateFromRateType(rateType);
       if (!isSmartMode) {
@@ -169,7 +169,7 @@ export const SetVariousScanBdRefreshRate = (
 };
 
 export const GetAutoRefreshRateBytesSeq = (
-  autoRateParamList: ReadonlyArray<Required<AutoAdjustRefreshRateParameters>>
+  autoRateParamList: ReadonlyArray<Required<AutoAdjustRefreshRateParameters>>,
 ): Buffer => {
   const buffer = Buffer.alloc(OneParameterLen * AllParameterNumberLen);
   autoRateParamList.forEach(({ AdjustRateType, ...props }) => {

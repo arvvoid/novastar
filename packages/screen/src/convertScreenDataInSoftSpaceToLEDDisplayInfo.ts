@@ -9,7 +9,7 @@ import { makeStruct } from '@novastar/native/common';
 import { LEDDisplayInfo } from './common';
 
 export default function convertScreenDataInSoftSpaceToLEDDisplayInfo(
-  scr: ScreenDataInSoftSpace
+  scr: ScreenDataInSoftSpace,
 ): LEDDisplayInfo {
   switch (scr.ScrType) {
     case LEDDisplyTypeEnum.SimpleSingleType:
@@ -25,7 +25,7 @@ export default function convertScreenDataInSoftSpaceToLEDDisplayInfo(
         ScanBdRows: scr.CabinetRow,
         PortCols: scr.PortCols,
         PortRows: scr.PortRows,
-        PortScanBdInfoList: scr.OnePortLoadInfo?.map(info => ({
+        PortScanBdInfoList: scr.OnePortLoadInfo?.map((info) => ({
           ConnectType: info.LineType,
           PortIndex: info.Port,
           ScanBdBegColNo: info.StartCabCol,
@@ -46,7 +46,7 @@ export default function convertScreenDataInSoftSpaceToLEDDisplayInfo(
         ScanBoardCols: scr.CabinetCol,
         ScanBoardRows: scr.CabinetRow,
         ScannerRegionList: scr.CabinetInDevice?.map(
-          cab =>
+          (cab) =>
             ({
               SenderIndex: cab.DevID,
               PortIndex: cab.NetPort,
@@ -58,7 +58,7 @@ export default function convertScreenDataInSoftSpaceToLEDDisplayInfo(
               RowIndexInScreen: cab.RowIndexInScreen,
               ColIndexInScreen: cab.ColIndexInScreen,
               DVIIndex: cab.DviIndex,
-            } as ScanBoardRegionInfo)
+            }) as ScanBoardRegionInfo,
         ),
       });
     case LEDDisplyTypeEnum.ComplexType:
@@ -66,7 +66,7 @@ export default function convertScreenDataInSoftSpaceToLEDDisplayInfo(
         Type: LEDDisplyTypeEnum.ComplexType,
         VirtualMode: scr.VirMode,
         ScanBoardRegionInfoList: scr.CabinetInDevice?.map(
-          cab =>
+          (cab) =>
             ({
               SenderIndex: cab.DevID,
               PortIndex: cab.NetPort,
@@ -75,7 +75,7 @@ export default function convertScreenDataInSoftSpaceToLEDDisplayInfo(
               Y: cab.YPos,
               Width: cab.Width,
               Height: cab.Height,
-            } as ScanBoardRegionInfo)
+            }) as ScanBoardRegionInfo,
         ),
       });
     default:

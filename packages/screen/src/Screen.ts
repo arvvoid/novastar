@@ -1,9 +1,9 @@
-import { Request } from '@novastar/codec';
+// import { Request } from '@novastar/codec';
 import SoftwareSpaceBaseAddress from '@novastar/native/SoftwareSpaceBaseAddress';
 
 import { SessionAPI } from './Session';
 
-const MAX_USHORT = 0xffff;
+// const MAX_USHORT = 0xffff;
 
 export default class Screen {
   readonly session: SessionAPI;
@@ -29,13 +29,13 @@ export default class Screen {
   static crc = (data: Buffer): number =>
     data.reduce((acc, value) => (acc + value) % 0xffff, 0x55aa);
 
-  async setPos(left: number, top: number): Promise<void> {
+/*   async setPos(left: number, top: number): Promise<void> {
     if (left < 0 || left > MAX_USHORT || top < 0 || top > MAX_USHORT)
       throw new TypeError('Invalid position');
     const req = new Request(1);
     const x = await this.session.connection.send(req);
   }
-
+ */
   /**
    * ScreenInfoAccessor::ReadNextSenderSoftSpace()
    */
@@ -43,7 +43,7 @@ export default class Screen {
     const data = await this.session.ReadSender_SoftwareSpace(
       0,
       4,
-      SoftwareSpaceBaseAddress.BASE_ADDRESS
+      SoftwareSpaceBaseAddress.BASE_ADDRESS,
     );
     return data.toString('ascii');
   }
@@ -51,7 +51,7 @@ export default class Screen {
   /**
    * ScreenInfoAccessor::ReadSenderScreenConfigInfo()
    */
-  async readConfig(): Promise<void> {
+/*   async readConfig(): Promise<void> {
     const data = await this.session.ReadSender_ScreenConfigSpace(0);
     const x = data.readUInt16LE(2);
     const y = data.readUInt16LE(4);
@@ -60,5 +60,5 @@ export default class Screen {
     const pixelColsInScanbd = data.readUInt16LE(6);
     const pixelRowsInScanbd = data.readUInt16LE(8);
     const num1 = data.readUInt16LE(13);
-  }
+  } */
 }

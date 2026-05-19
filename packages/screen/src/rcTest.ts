@@ -18,11 +18,11 @@ const keypress = async (): Promise<number> => {
       process.stdin.setRawMode(false);
       process.stdin.pause();
       if (code === 3) reject(new Error('Ctrl+C'));
-      else resolve(code);
+      else resolve(Number(code));
     });
   });
 };
-keypress().then(code => console.log(code));
+keypress().then((code) => console.log(code));
 
 type MenuItem = {
   msg: string;
@@ -77,7 +77,7 @@ const menu: Menu<Keys> = {
 let screen: ScreenConfigurator | undefined;
 
 const delay = (ms: number): Promise<void> =>
-  new Promise<void>(resolve => {
+  new Promise<void>((resolve) => {
     setTimeout(resolve, ms);
   });
 
@@ -151,7 +151,7 @@ const showMenu = async (m: Menu<Keys>): Promise<void> => {
     const c = String.fromCharCode(await keypress());
     const res = entries.reduce<Keys | undefined>(
       (acc, [key, { code }]) => acc ?? (code.includes(c) ? key : acc),
-      undefined
+      undefined,
     );
     show = !!res;
     if (res) {
@@ -187,7 +187,9 @@ const showMenu = async (m: Menu<Keys>): Promise<void> => {
       default:
         break;
     }
-    res && res !== 'quit' && (await delay(1000));
+    if (res && res !== 'quit') {
+      await delay(1000);
+    }
   }
 };
 

@@ -2,7 +2,6 @@
 import AddressMapping from '@novastar/native/AddressMapping';
 import { ExtractType, Struct } from 'typed-struct';
 
-
 const TempInfo = new Struct('TempInfo')
   .Bits8({ IsValid: [0, 1] })
   .back()
@@ -51,7 +50,7 @@ export const HWStatus = new Struct('HWStatus')
   .Boolean8('isConnectMonitorCard') // 32
   .back(0)
   .seek(
-    AddressMapping.Scanner_TempInfoOfMonitorCardAddr - AddressMapping.Scanner_AllMonitorDataAddr
+    AddressMapping.Scanner_TempInfoOfMonitorCardAddr - AddressMapping.Scanner_AllMonitorDataAddr,
   )
   .Struct('tempInfoInMonitorCard', TempInfo) // 39
   .Struct('humidityInfoInMonitorCard', ValueInfo) // 41
@@ -59,12 +58,12 @@ export const HWStatus = new Struct('HWStatus')
   .StructArray(
     'fanSpeedInfoListMonitorCard',
     FanSpeedInfo,
-    AddressMapping.Scanner_FanSpeedOfMonitorCardNum
+    AddressMapping.Scanner_FanSpeedOfMonitorCardNum,
   ) // 43
   .StructArray(
     'valtageInfoListMonitorCard',
     VoltageInfo,
-    AddressMapping.Scanner_VoltageOfMonitorCardNum
+    AddressMapping.Scanner_VoltageOfMonitorCardNum,
   ) // 47
   .Buffer('analogInputData', AddressMapping.Scanner_AnalogInputOfMonitorCardNum) // 56
   .seek(1)

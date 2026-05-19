@@ -1,6 +1,5 @@
 import { ExtractType, Struct } from 'typed-struct';
 
-
 export const DviScreenInfoFlag = 'DSCI';
 /**
  * DSCI

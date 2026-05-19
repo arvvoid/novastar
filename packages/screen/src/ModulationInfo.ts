@@ -56,8 +56,8 @@ export const decodeModulationInfo = (buf: Buffer): Required<SenderModulationInfo
         SenderIndex,
         PortIndex: info.portIndex,
         ModulationModeTypeInfoList: modes,
-        IsUseDistributor: modes.some(mode => useDistributor.includes(mode)),
-      })
+        IsUseDistributor: modes.some((mode) => useDistributor.includes(mode)),
+      }),
     );
     offset += length;
   }
@@ -65,14 +65,14 @@ export const decodeModulationInfo = (buf: Buffer): Required<SenderModulationInfo
 };
 
 export const encodeModulationInfo = (
-  modulations: ReadonlyArray<Required<SenderModulationInfo>>
+  modulations: ReadonlyArray<Required<SenderModulationInfo>>,
 ): Buffer => {
   const length = modulations.reduce(
     (acc, item) =>
       acc +
       ModulationInfo.baseSize +
       item.ModulationModeTypeInfoList.length * ModulationMode.baseSize,
-    0
+    0,
   );
   const infoHeader = new ModulationInfoHeader(ModulationInfoHeader.baseSize + length);
   infoHeader.length = length;

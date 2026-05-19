@@ -2,7 +2,7 @@ import path from 'path';
 import { inspect } from 'util';
 
 import { compress, decompress } from '@sarakusha/lzma';
-import type { X2jOptions } from "fast-xml-parser";
+import type { X2jOptions } from 'fast-xml-parser';
 import { XMLParser } from 'fast-xml-parser';
 
 import { pack, toHex, unpack } from './common';
@@ -70,7 +70,7 @@ describe('cfg', () => {
   it('lzma1', async () => {
     const comp = Buffer.from(
       'XQAAAAGyAAAAAAAAAAA9iIZmU1QGVf8V9Mv+v+O8UymTDbCapeUd9rlC85hQex5rzjVoQImDsO/ZzvjM7WsM3c/oqt3BF6stB8FgqwQmIZZOAgz+yeM/IBrIMF+NG7FynSKTPIaTDG3tEvKP2t8dDdEUEyevx7XawjvaFRS35LYWSTrrZWJCHsPlHzUFGsciodlcSJSkJCL6T1YA',
-      'base64'
+      'base64',
     );
     const src =
       '{"SectionFormat":[{"FileType":"ScreenDataType","Addr":83894272,"SrcLength":2523,"DestLength":374,"CheckSum":3368,"Version":"1001","DecompressProps":"]\\u0000\\u0000\\u0000\\u0001"}]}';

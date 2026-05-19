@@ -71,7 +71,7 @@ export function decodeScreenInfo(data: Buffer): ScreenInfo {
   const screens: LEDDisplayInfo[] = [];
   for (let i = 0; i < screenCount; i += 1) {
     const length = data.readUInt32LE(
-      ScreenInfoRelativeAddress.SCREEN_HEADERINFO_SCREENLENINFOADDR + 4 * i
+      ScreenInfoRelativeAddress.SCREEN_HEADERINFO_SCREENLENINFOADDR + 4 * i,
     );
     const type = data.readUInt8(screenDataPos);
     debug(`[${i}]; type: ${type}; length: ${length}`);
@@ -81,12 +81,12 @@ export function decodeScreenInfo(data: Buffer): ScreenInfo {
         break;
       case LEDDisplyTypeEnum.StandardType:
         screens.push(
-          decodeStandardLEDDisplayInfo(data.slice(screenDataPos, screenDataPos + length))
+          decodeStandardLEDDisplayInfo(data.slice(screenDataPos, screenDataPos + length)),
         );
         break;
       case LEDDisplyTypeEnum.ComplexType:
         screens.push(
-          decodeComplexLEDDisplayInfo(data.slice(screenDataPos, screenDataPos + length))
+          decodeComplexLEDDisplayInfo(data.slice(screenDataPos, screenDataPos + length)),
         );
         break;
       default:

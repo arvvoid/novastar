@@ -61,32 +61,26 @@ const getCabinetPosition = (
     ? screen.ScannerRegionList.filter(notEmptyXY)
     : screen.ScanBoardRegionInfoList.filter(notEmptyXY);
   const cabinet = list.find(
-    ({
-      SenderIndex,
-      PortIndex,
-      ConnectIndex,
-    }) =>
+    ({ SenderIndex, PortIndex, ConnectIndex }) =>
       SenderIndex === sender && PortIndex === port && ConnectIndex === card,
   );
   if (!cabinet) return null;
-  const [uniqX, uniqY] = list.reduce((
-    [xSet, ySet],
-    {
-      X,
-      Y,
-    }) => {
-    xSet.add(X);
-    ySet.add(Y);
-    return [xSet, ySet];
-  }, [new Set<number>(), new Set<number>()]);
+  const [uniqX, uniqY] = list.reduce(
+    ([xSet, ySet], { X, Y }) => {
+      xSet.add(X);
+      ySet.add(Y);
+      return [xSet, ySet];
+    },
+    [new Set<number>(), new Set<number>()],
+  );
   const sortedX = [...uniqX.values()].sort();
   const sortedY = [...uniqY.values()].sort();
   return {
     sender,
     port,
     card,
-    row: cabinet.RowIndexInScreen ?? sortedY.findIndex(y => y === cabinet.Y),
-    column: cabinet.ColIndexInScreen ?? sortedX.findIndex(x => x === cabinet.X),
+    row: cabinet.RowIndexInScreen ?? sortedY.findIndex((y) => y === cabinet.Y),
+    column: cabinet.ColIndexInScreen ?? sortedX.findIndex((x) => x === cabinet.X),
     left: cabinet.X ?? 0,
     top: cabinet.Y ?? 0,
   };

@@ -2,14 +2,25 @@
   "extends": "../../tsconfig-settings.json",
   "compilerOptions": {
     "rootDir": "src",
-    "baseUrl": "./",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "paths": {},
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules/**", "bak/**", "build/**", "coverage/**"],
+  "include": [
+    "src/**/*.ts",
+    "src/rcTest.ts"
+  ],
+  "exclude": [
+    "node_modules/**",
+    "bak/**",
+    "build/**",
+    "coverage/**"
+  ],
   "typedocOptions": {
-    "entryPoints": ["src"],
+    "entryPoints": [
+      "src"
+    ],
     "entryPointStrategy": "expand"
   }
 }

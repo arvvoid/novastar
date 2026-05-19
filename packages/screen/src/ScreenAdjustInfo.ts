@@ -45,5 +45,5 @@ export function decodeScreenAdjustInfo(buffer: Buffer): Required<ScreenAdjustPar
   if (buffer.length < length) throw new Error('Invalid adjust length');
   const params = version <= 1001 ? info.oldParams : info.params;
   if (params.length !== count) throw new TypeError('Wrong number of adjust parameters');
-  return params.map(param => makeStruct(ScreenAdjustParams, param));
+  return params.map((param) => makeStruct(ScreenAdjustParams, param));
 }

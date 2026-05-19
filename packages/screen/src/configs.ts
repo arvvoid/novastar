@@ -57,10 +57,10 @@ export const loadSystemConfig = (pathname: string): SystemParameterConfig => {
  * @param pathname
  */
 export const loadScanBoardConfig = (
-  pathname: string
+  pathname: string,
 ): readonly [ScanBoardProperty, SendParam[]] => {
   const zip = new Zip(pathname);
-  const [xmlData, binData] = zip.getEntries().map(entry => zip.readFile(entry));
+  const [xmlData, binData] = zip.getEntries().map((entry) => zip.readFile(entry));
   if (!xmlData) throw new Error('Invalid archive');
   const xml = scanboardParser(xmlData);
   const params: SendParam[] = binData ? decodeScannerBinData(binData) : [];
@@ -99,8 +99,8 @@ export const decodeScreenConfig = (buffer: Buffer): ScrConfig => {
   const adjustInfo = decodeScreenAdjustInfo(
     data.slice(
       dviInfoLength + screenInfoLength,
-      dviInfoLength + screenInfoLength + adjustInfoLength
-    )
+      dviInfoLength + screenInfoLength + adjustInfoLength,
+    ),
   );
   if (adjustInfo.length > 0) {
     if (adjustInfo.length !== screenInfo.screens.length)

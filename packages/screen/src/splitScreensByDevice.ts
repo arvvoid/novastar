@@ -9,7 +9,7 @@ import sortBy from 'lodash/sortBy';
  * @param screens
  */
 export default function splitScreensByDevice(
-  screens: ScreenDataInSoftSpace[]
+  screens: ScreenDataInSoftSpace[],
 ): ScreenDataInSoftSpace[][] {
   return sortBy(
     Object.entries(
@@ -26,7 +26,7 @@ export default function splitScreensByDevice(
           case LEDDisplyTypeEnum.StandardType:
           case LEDDisplyTypeEnum.ComplexType: {
             const ids =
-              scr.CabinetInDevice?.map(({ DevID }) => DevID).filter(DevID => DevID !== 255) ?? [];
+              scr.CabinetInDevice?.map(({ DevID }) => DevID).filter((DevID) => DevID !== 255) ?? [];
             return (scr.CabinetInDevice ?? []).reduce<Record<number, ScreenDataInSoftSpace[]>>(
               (res, cab) => {
                 const key: number = (cab.DevID !== 255 ? cab.DevID : ids?.[0]) ?? 0;
@@ -42,7 +42,7 @@ export default function splitScreensByDevice(
                     ...other,
                   };
                 const copy = [...prev];
-                const found = copy.findIndex(item => item.UUID === scr.UUID);
+                const found = copy.findIndex((item) => item.UUID === scr.UUID);
                 if (found !== -1) {
                   const [item] = copy.splice(found, 1);
                   copy.splice(found, 0, {
@@ -60,14 +60,14 @@ export default function splitScreensByDevice(
                   ...other,
                 };
               },
-              acc
+              acc,
             );
           }
           default:
             throw new TypeError('Invalid screen type');
         }
-      }, {})
+      }, {}),
     ),
-    ([index]) => index
+    ([index]) => index,
   ).map(([_, value]) => value);
 }

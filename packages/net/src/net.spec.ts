@@ -42,11 +42,11 @@ describe('LAN', () => {
               data: { 'data.data': data },
             },
           },
-        }) => data
+        }) => data,
       )
-      .map(data => Buffer.from(data.replace(/:/g, ''), 'hex'))
-      .filter(raw => raw.length >= Packet.baseSize)
-      .map(raw => new Packet(raw));
+      .map((data) => Buffer.from(data.replace(/:/g, ''), 'hex'))
+      .filter((raw) => raw.length >= Packet.baseSize)
+      .map((raw) => new Packet(raw));
     packets.forEach(({ source, destination, deviceType, port, io, address, data }) => {
       console.log(
         `${
@@ -55,7 +55,7 @@ describe('LAN', () => {
           io === IO.Write ? 'W' : 'R'
         }\t${address.toString(16).padStart(8, '0')}\t${data.toString('hex')}\n${
           data.length ? data.toString('latin1') : '\n'
-        }\n`
+        }\n`,
       );
     });
   });

@@ -62,7 +62,7 @@ export const ScreenConfigInfo = new Struct('ScreenConfigInfo')
           break;
       }
       return buf.writeUInt8(data) > 0;
-    }
+    },
   )
   .UInt16LE('CabinetsPerPort')
   .compile();

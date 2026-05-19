@@ -8,7 +8,7 @@ import sortBy from 'lodash/sortBy';
  */
 export default function packAndSortCabinets(
   screenList: ScreenDataInSoftSpace[],
-  index: number
+  index: number,
 ): ScreenDataInSoftSpace[] {
   return sortBy(
     Object.values(
@@ -35,11 +35,11 @@ export default function packAndSortCabinets(
           else prev.CabinetInDevice.push(...copy.CabinetInDevice);
         }
         return { [copy.UUID]: prev ?? copy, ...other };
-      }, {})
+      }, {}),
     ).map(({ CabinetInDevice: cabs, ...screen }) => ({
       CabinetInDevice: cabs && sortBy(cabs, ['YPos', 'XPos']),
       ...screen,
     })),
-    'ScreenIndex'
+    'ScreenIndex',
   );
 }
