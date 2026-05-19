@@ -1,8 +1,0 @@
-bin/
-build/
-decompiled/
-dll/
-generated/Session.ts
-node_modules/
-obj/
-src/

@@ -27,11 +27,11 @@
     "directory": "packages/serial"
   },
   "dependencies": {
-    "@novastar/codec": "^2.2.0-alpha.2",
-    "@serialport/bindings-cpp": "^12.0.1",
-    "conf": "^9.0.2",
-    "serialport": "^12.0.0",
-    "tiny-typed-emitter": "^2.0.3"
+    "@novastar/codec": "2.2.0-alpha.2",
+    "@serialport/bindings-cpp": "^13.0.1",
+    "conf": "^15.1.0",
+    "serialport": "^13.0.0",
+    "tiny-typed-emitter": "^2.1.0"
   },
   "peerDependencies": {
     "debug": "^4.3.3"
@@ -40,9 +40,9 @@
     "build": "tsdown",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
-    "fix:lint": "eslint src --ext .ts --fix -c ../../.eslintrc-prod.js",
+    "fix:lint": "pnpm exec eslint src --fix",
     "test": "run-s build test:*",
-    "test:lint": "eslint src --ext .ts -c ../../.eslintrc-prod.js",
+    "test:lint": "pnpm exec eslint src",
     "test:prettier": "prettier \"src/**/*.ts\" --list-different",
     "test:spelling": "cspell \"{README.md,.github/*.md,src/**/*.ts}\"",
     "test:unit": "jest src",

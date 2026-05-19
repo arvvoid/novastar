@@ -1,6 +1,9 @@
-const { jsxBracketSameLine, ...cfg } = require('prettier-airbnb-config');
 module.exports = {
-  ...cfg,
-  bracketSpacing: true,
   printWidth: 100,
+  tabWidth: 2,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'all',
+  bracketSpacing: true,
+  arrowParens: 'always',
 };
