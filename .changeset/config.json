@@ -1,0 +1,13 @@
+{
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "access": "public",
+  "baseBranch": "main",
+  "linked": [[
+    "@novastar/codec",
+    "@novastar/native",
+    "@novastar/net",
+    "@novastar/serial",
+    "@novastar/screen"
+  ]]
+}

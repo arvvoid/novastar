@@ -1,5 +1,18 @@
 # Change Log
 
+## 2.2.0-alpha.3
+
+### Patch Changes
+
+- tsup -> tsdown
+  disable request blocking for network transport
+  BREAKING CHANGE: replaced default export with named export in packages/screen/src/index.ts
+- Updated dependencies
+  - @novastar/codec@2.2.0-alpha.3
+  - @novastar/native@2.2.0-alpha.3
+  - @novastar/net@2.2.0-alpha.3
+  - @novastar/serial@2.2.0-alpha.3
+
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
