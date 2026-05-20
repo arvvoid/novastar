@@ -96,10 +96,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@novastar/codec": "2.2.0-alpha.3",
-    "@novastar/native": "2.2.0-alpha.3",
-    "@novastar/net": "2.2.0-alpha.3",
-    "@novastar/serial": "2.2.0-alpha.3",
+    "@novastar/codec": "workspace:^",
+    "@novastar/native": "workspace:^",
+    "@novastar/net": "workspace:^",
+    "@novastar/serial": "workspace:^",
     "@sarakusha/lzma": "^2.3.4",
     "adm-zip": "^0.5.17",
     "fast-xml-parser": "^5.8.0",
