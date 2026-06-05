@@ -24,7 +24,7 @@ const schema: Schema<{ knownDevices: KnownDevice[] }> = {
   },
 };
 
-const config = new Conf({ schema });
+const config = new Conf({ projectName: 'novastar-serial', schema });
 
 /**
  * Get all known devices
@@ -34,7 +34,7 @@ export const getKnownDevices = (): ReadonlyArray<KnownDevice> => config.get('kno
 debug(
   `known devices: ${getKnownDevices()
     .map(([VID, PID]) => `${VID}/${PID}`)
-    .join(';')}`
+    .join(';')}`,
 );
 
 /**
@@ -44,7 +44,7 @@ debug(
  */
 export const addKnownDevice = (
   vendorId: string | number,
-  productId: string | number
+  productId: string | number,
 ): ReadonlyArray<KnownDevice> => {
   const VID = typeof vendorId === 'number' ? vendorId.toString(16) : vendorId;
   const PID = typeof productId === 'number' ? productId.toString(16) : productId;
@@ -62,13 +62,13 @@ export const addKnownDevice = (
  */
 export const removeKnownDevice = (
   vendorId: string | number,
-  productId: string | number
+  productId: string | number,
 ): ReadonlyArray<KnownDevice> => {
   const VID = typeof vendorId === 'number' ? vendorId.toString(16) : vendorId;
   const PID = typeof productId === 'number' ? productId.toString(16) : productId;
   config.set(
     'knownDevice',
-    getKnownDevices().filter(([vid, pid]) => vid !== VID || pid !== PID)
+    getKnownDevices().filter(([vid, pid]) => vid !== VID || pid !== PID),
   );
   return getKnownDevices();
 };
@@ -84,7 +84,7 @@ const isNovastarUSBDevice =
     known.findIndex(
       ([vendorId, productId]) =>
         vendorId.toLowerCase() === portInfo.vendorId?.toLowerCase() &&
-        productId.toLowerCase() === portInfo.productId?.toLowerCase()
+        productId.toLowerCase() === portInfo.productId?.toLowerCase(),
     ) !== -1;
 
 export interface SerialBindingEvents {
@@ -111,7 +111,7 @@ export type SerialSession = Session<SerialPort> & API;
  * @returns {Promise<PortInfo[]>} - paths to found devices
  */
 export const findSendingCards = async (
-  known: ReadonlyArray<KnownDevice> = []
+  known: ReadonlyArray<KnownDevice> = [],
 ): Promise<PortInfo[]> => {
   const ports = await SerialPort.list();
   return ports.filter(isNovastarUSBDevice(getKnownDevices().concat(known)));
