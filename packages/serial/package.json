@@ -27,7 +27,7 @@
     "directory": "packages/serial"
   },
   "dependencies": {
-    "@novastar/codec": "workspace:^",
+    "@novastar/codec": "^2.2.0",
     "@serialport/bindings-cpp": "^13.0.1",
     "conf": "^15.1.0",
     "serialport": "^13.0.0",

@@ -62,7 +62,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@novastar/codec": "workspace:^",
+    "@novastar/codec": "^2.2.0",
     "tiny-typed-emitter": "^2.1.0"
   },
   "peerDependencies": {

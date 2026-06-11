@@ -130,8 +130,8 @@ importers:
   packages/native:
     dependencies:
       '@novastar/codec':
-        specifier: workspace:^
-        version: link:../codec
+        specifier: ^2.2.0
+        version: 2.2.0(debug@4.4.3)
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
@@ -170,8 +170,8 @@ importers:
   packages/net:
     dependencies:
       '@novastar/codec':
-        specifier: workspace:^
-        version: link:../codec
+        specifier: ^2.2.0
+        version: 2.2.0(debug@4.4.3)
       debug:
         specifier: ^4.3.3
         version: 4.4.3
@@ -182,17 +182,17 @@ importers:
   packages/screen:
     dependencies:
       '@novastar/codec':
-        specifier: workspace:^
-        version: link:../codec
+        specifier: ^2.2.0
+        version: 2.2.0(debug@4.4.3)
       '@novastar/native':
-        specifier: workspace:^
-        version: link:../native
+        specifier: ^2.2.0
+        version: 2.2.0
       '@novastar/net':
-        specifier: workspace:^
-        version: link:../net
+        specifier: ^2.2.0
+        version: 2.2.0(debug@4.4.3)
       '@novastar/serial':
-        specifier: workspace:^
-        version: link:../serial
+        specifier: ^2.2.0
+        version: 2.2.0(debug@4.4.3)
       '@sarakusha/lzma':
         specifier: ^2.3.4
         version: 2.3.4
@@ -240,8 +240,8 @@ importers:
   packages/serial:
     dependencies:
       '@novastar/codec':
-        specifier: workspace:^
-        version: link:../codec
+        specifier: ^2.2.0
+        version: 2.2.0(debug@4.4.3)
       '@serialport/bindings-cpp':
         specifier: ^13.0.1
         version: 13.0.1
@@ -1054,6 +1054,25 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@novastar/codec@2.2.0':
+    resolution: {integrity: sha512-wYhoNHJDL+nWgy05KOUp6rsboHbzXRY4+H7VAL0zCwBfbyX0+jEO8uizZJO0FDCS4q2ZX67mq9VGRsA22qu2+g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      debug: ^4.3.3
+
+  '@novastar/native@2.2.0':
+    resolution: {integrity: sha512-ss8Jospf3dCHGPbEueC8PloZdN6Adiaw/D7lTxAnTZvfStzfqfbCuypsyJElsrUdAHbM9rRvxOrfFTXiYxfO0A==}
+
+  '@novastar/net@2.2.0':
+    resolution: {integrity: sha512-JxD+Mj8XcoL2etdpBeBLm/oU/iJFEqBbuUKMN2DVgssa1EYCN2g20gLikVLcJvi/BGS3w+XuMvKogLIqlTCGyw==}
+    peerDependencies:
+      debug: ^4.3.3
+
+  '@novastar/serial@2.2.0':
+    resolution: {integrity: sha512-gwZiy5+zzxWgJZwKysyTueiVfK3Hcq9hj3UyNIZ9nuSniGGLtglFm7W6X0WV3M8vxshmyIQqV2REb5Jh9tILXA==}
+    peerDependencies:
+      debug: ^4.3.3
 
   '@oxc-project/types@0.130.0':
     resolution: {integrity: sha512-ibD2usx9JRu7f5pu2tMKMI4cpA4NgXJQoYRP4pQ7Pxmn1l6k/53qWtQWZayhYy3X4QZkt90Ot+mJEaeXouio6Q==}
@@ -5529,6 +5548,43 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
+
+  '@novastar/codec@2.2.0(debug@4.4.3)':
+    dependencies:
+      debug: 4.4.3
+      pump: 3.0.4
+      tiny-typed-emitter: 2.1.0
+      typed-struct: 2.7.3(debug@4.4.3)
+    transitivePeerDependencies:
+      - buffer
+      - iconv-lite
+
+  '@novastar/native@2.2.0':
+    dependencies:
+      '@novastar/codec': link:packages/codec
+      fp-ts: 2.16.11
+      io-ts: 2.2.22(fp-ts@2.16.11)
+      io-ts-types: 0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11)))
+      monocle-ts: 2.3.13(fp-ts@2.16.11)
+      newtype-ts: 0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))
+      tslib: 2.8.1
+
+  '@novastar/net@2.2.0(debug@4.4.3)':
+    dependencies:
+      '@novastar/codec': link:packages/codec
+      debug: 4.4.3
+      tiny-typed-emitter: 2.1.0
+
+  '@novastar/serial@2.2.0(debug@4.4.3)':
+    dependencies:
+      '@novastar/codec': link:packages/codec
+      '@serialport/bindings-cpp': 13.0.1
+      conf: 15.1.0
+      debug: 4.4.3
+      serialport: 13.0.0
+      tiny-typed-emitter: 2.1.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@oxc-project/types@0.130.0': {}
 
