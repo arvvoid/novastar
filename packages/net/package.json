@@ -1,6 +1,6 @@
 {
   "name": "@novastar/net",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Network binding for @novastar/codec",
   "main": "dist/net.cjs",
   "types": "dist/net.d.mts",
@@ -62,7 +62,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@novastar/codec": "^2.2.0",
+    "@novastar/codec": "^2.2.1",
     "tiny-typed-emitter": "^2.1.0"
   },
   "peerDependencies": {

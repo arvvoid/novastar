@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.2.1
+
+### Patch Changes
+
+- 051d77e: Publish resolvable internal dependency ranges instead of workspace protocols.
+- Updated dependencies [051d77e]
+  - @novastar/codec@2.2.1
+  - @novastar/native@2.2.1
+  - @novastar/net@2.2.1
+  - @novastar/serial@2.2.1
+
 ## 2.2.0
 
 ### Patch Changes

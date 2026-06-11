@@ -1,6 +1,6 @@
 {
   "name": "@novastar/serial",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Serial binding for @novastar/codec",
   "license": "MIT",
   "author": "Andrei Sarakeev <sarakusha@gmail.com>",
@@ -27,7 +27,7 @@
     "directory": "packages/serial"
   },
   "dependencies": {
-    "@novastar/codec": "^2.2.0",
+    "@novastar/codec": "^2.2.1",
     "@serialport/bindings-cpp": "^13.0.1",
     "conf": "^15.1.0",
     "serialport": "^13.0.0",
