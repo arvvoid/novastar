@@ -1,5 +1,14 @@
 # Change Log
 
+## 2.2.0
+
+### Patch Changes
+
+- efd8973: tsup -> tsdown
+  disable request blocking for network transport
+  BREAKING CHANGE: replaced default export with named export in packages/screen/src/index.ts
+- b2302bc: reduce connection log noise
+
 ## 2.2.0-alpha.3
 
 ### Patch Changes
