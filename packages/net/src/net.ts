@@ -6,6 +6,8 @@ import { API, Connection, delay, notEmpty, Session } from '@novastar/codec';
 import debugFactory from 'debug';
 import { TypedEmitter } from 'tiny-typed-emitter';
 
+import { getBroadcastAddress } from './broadcast';
+
 const debug = debugFactory('novastar:net');
 
 export const UDP_PORT = 3800;
@@ -33,35 +35,54 @@ export interface NetBindingEvents {
   disconnect(address: string): void;
 }
 
-const interfaceSearch = (address: string, dest = '255.255.255.255'): Promise<string[]> =>
+const interfaceSearch = (
+  { address, netmask }: NetworkInterfaceInfo,
+  dest?: string,
+): Promise<string[]> =>
   new Promise<string[]>((resolve) => {
     const socket = dgram.createSocket('udp4');
     let completed = false;
     let timer: NodeJS.Timeout | undefined;
     const list: string[] = [];
     const complete = (): void => {
+      if (completed) return;
+      completed = true;
       clearTimeout(timer);
-      socket.close();
-      if (!completed) {
-        completed = true;
-        resolve(list);
-        // debug(`stop: ${address}`);
+      try {
+        socket.close();
+      } catch (err) {
+        debug('error while closing discovery socket on %s: %s', address, (err as Error).message);
       }
+      resolve(list);
     };
-    socket.on('error', complete);
+    socket.on('error', (err) => {
+      debug('discovery socket error on %s: %s', address, err.message);
+      complete();
+    });
     socket.on('message', (msg, rinfo) => {
       if (msg.toString().startsWith(RES) && !completed && !list.includes(rinfo.address)) {
         list.push(rinfo.address);
-        // debug(`found: ${rinfo.address}`);
+        debug('found %s via %s', rinfo.address, address);
       }
     });
     socket.bind(UDP_PORT, address, () => {
-      socket.setBroadcast(true);
-      socket.addMembership(MULTICAST_ADDRESS, address);
-      socket.setMulticastTTL(128);
-      timer = setTimeout(complete, UDP_TIMEOUT);
-      socket.send(REQ, UDP_PORT, dest, (err) => err && complete());
-      // debug(`start: ${address}`);
+      try {
+        socket.setBroadcast(true);
+        socket.addMembership(MULTICAST_ADDRESS, address);
+        socket.setMulticastTTL(128);
+        timer = setTimeout(complete, UDP_TIMEOUT);
+        const destination = dest ?? getBroadcastAddress(address, netmask);
+        socket.send(REQ, UDP_PORT, destination, (err) => {
+          if (err) {
+            debug('discovery send error from %s to %s: %s', address, destination, err.message);
+            complete();
+          }
+        });
+        debug('search from %s to %s', address, destination);
+      } catch (err) {
+        debug('error while starting discovery on %s: %s', address, (err as Error).message);
+        complete();
+      }
     });
   });
 
@@ -73,9 +94,8 @@ export const findNetDevices = async (dest?: string): Promise<string[]> => {
   const interfaces = Object.values<NetworkInterfaceInfo[] | undefined>(os.networkInterfaces())
     .filter(notEmpty)
     .reduce<NetworkInterfaceInfo[]>((res, values) => [...res, ...values], [])
-    .filter((nic) => !nic.internal && nic.family === 'IPv4')
-    .map(({ address }) => address);
-  const results = await Promise.all(interfaces.map((address) => interfaceSearch(address, dest)));
+    .filter((nic) => !nic.internal && nic.family === 'IPv4');
+  const results = await Promise.all(interfaces.map((nic) => interfaceSearch(nic, dest)));
   return results.reduce<string[]>(
     (acc, list) => [...acc, ...list.filter((host) => !acc.includes(host))],
     [],
