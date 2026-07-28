@@ -130,8 +130,8 @@ importers:
   packages/native:
     dependencies:
       '@novastar/codec':
-        specifier: ^2.2.0
-        version: 2.2.0(debug@4.4.3)
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       fp-ts:
         specifier: ^2.16.11
         version: 2.16.11
@@ -170,8 +170,8 @@ importers:
   packages/net:
     dependencies:
       '@novastar/codec':
-        specifier: ^2.2.0
-        version: 2.2.0(debug@4.4.3)
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       debug:
         specifier: ^4.3.3
         version: 4.4.3
@@ -182,17 +182,17 @@ importers:
   packages/screen:
     dependencies:
       '@novastar/codec':
-        specifier: ^2.2.0
-        version: 2.2.0(debug@4.4.3)
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       '@novastar/native':
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       '@novastar/net':
-        specifier: ^2.2.0
-        version: 2.2.0(debug@4.4.3)
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       '@novastar/serial':
-        specifier: ^2.2.0
-        version: 2.2.0(debug@4.4.3)
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       '@sarakusha/lzma':
         specifier: ^2.3.4
         version: 2.3.4
@@ -240,8 +240,8 @@ importers:
   packages/serial:
     dependencies:
       '@novastar/codec':
-        specifier: ^2.2.0
-        version: 2.2.0(debug@4.4.3)
+        specifier: ^2.2.1
+        version: 2.2.1(debug@4.4.3)
       '@serialport/bindings-cpp':
         specifier: ^13.0.1
         version: 13.0.1
@@ -1055,22 +1055,22 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@novastar/codec@2.2.0':
-    resolution: {integrity: sha512-wYhoNHJDL+nWgy05KOUp6rsboHbzXRY4+H7VAL0zCwBfbyX0+jEO8uizZJO0FDCS4q2ZX67mq9VGRsA22qu2+g==}
+  '@novastar/codec@2.2.1':
+    resolution: {integrity: sha512-sGe42ErZk1IDOA4ZBupOvNpg5tI4964fH9NTzvBRQEtYhkxXifveJgw219u01q2v5+S/76cUQkZSrPbk8pDxLA==}
     engines: {node: '>=18'}
     peerDependencies:
       debug: ^4.3.3
 
-  '@novastar/native@2.2.0':
-    resolution: {integrity: sha512-ss8Jospf3dCHGPbEueC8PloZdN6Adiaw/D7lTxAnTZvfStzfqfbCuypsyJElsrUdAHbM9rRvxOrfFTXiYxfO0A==}
+  '@novastar/native@2.2.1':
+    resolution: {integrity: sha512-ofiCv2u/a2n7NX9Q8UGIKGjSrxSvarUmSCrs4+7h+GmOqDblx8LQ7kyfr3ExFvC0B6cbMGtI25PfZEnN5GjmgQ==}
 
-  '@novastar/net@2.2.0':
-    resolution: {integrity: sha512-JxD+Mj8XcoL2etdpBeBLm/oU/iJFEqBbuUKMN2DVgssa1EYCN2g20gLikVLcJvi/BGS3w+XuMvKogLIqlTCGyw==}
+  '@novastar/net@2.2.1':
+    resolution: {integrity: sha512-U+RXNW8aXNMoelZ+JlJAdv63vuhYFJB/DdYvIOE4sbNcfhcSfhD6Ijv3hC1C+1vl7lMWvYLpmS0PDHOBT0qG+g==}
     peerDependencies:
       debug: ^4.3.3
 
-  '@novastar/serial@2.2.0':
-    resolution: {integrity: sha512-gwZiy5+zzxWgJZwKysyTueiVfK3Hcq9hj3UyNIZ9nuSniGGLtglFm7W6X0WV3M8vxshmyIQqV2REb5Jh9tILXA==}
+  '@novastar/serial@2.2.1':
+    resolution: {integrity: sha512-7iAPuNVqsKlIoeibVhQs2lOSa254tJDDTxw/DxQMS7+c39orIymRs+SK1DnKSXtPHLJ2Uxalh8FSuMz+FpjNqA==}
     peerDependencies:
       debug: ^4.3.3
 
@@ -2617,6 +2617,7 @@ packages:
   git-raw-commits@5.0.1:
     resolution: {integrity: sha512-Y+csSm2GD/PCSh6Isd/WiMjNAydu0VBiG9J7EdQsNA5P9uXvLayqjmTsNlK5Gs9IhblFZqOU0yid5Il5JPoLiQ==}
     engines: {node: '>=18'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:
@@ -5549,7 +5550,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
 
-  '@novastar/codec@2.2.0(debug@4.4.3)':
+  '@novastar/codec@2.2.1(debug@4.4.3)':
     dependencies:
       debug: 4.4.3
       pump: 3.0.4
@@ -5559,31 +5560,40 @@ snapshots:
       - buffer
       - iconv-lite
 
-  '@novastar/native@2.2.0':
+  '@novastar/native@2.2.1(debug@4.4.3)':
     dependencies:
-      '@novastar/codec': link:packages/codec
+      '@novastar/codec': 2.2.1(debug@4.4.3)
       fp-ts: 2.16.11
       io-ts: 2.2.22(fp-ts@2.16.11)
       io-ts-types: 0.5.19(fp-ts@2.16.11)(io-ts@2.2.22(fp-ts@2.16.11))(monocle-ts@2.3.13(fp-ts@2.16.11))(newtype-ts@0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11)))
       monocle-ts: 2.3.13(fp-ts@2.16.11)
       newtype-ts: 0.3.5(fp-ts@2.16.11)(monocle-ts@2.3.13(fp-ts@2.16.11))
       tslib: 2.8.1
+    transitivePeerDependencies:
+      - buffer
+      - debug
+      - iconv-lite
 
-  '@novastar/net@2.2.0(debug@4.4.3)':
+  '@novastar/net@2.2.1(debug@4.4.3)':
     dependencies:
-      '@novastar/codec': link:packages/codec
+      '@novastar/codec': 2.2.1(debug@4.4.3)
       debug: 4.4.3
       tiny-typed-emitter: 2.1.0
+    transitivePeerDependencies:
+      - buffer
+      - iconv-lite
 
-  '@novastar/serial@2.2.0(debug@4.4.3)':
+  '@novastar/serial@2.2.1(debug@4.4.3)':
     dependencies:
-      '@novastar/codec': link:packages/codec
+      '@novastar/codec': 2.2.1(debug@4.4.3)
       '@serialport/bindings-cpp': 13.0.1
       conf: 15.1.0
       debug: 4.4.3
       serialport: 13.0.0
       tiny-typed-emitter: 2.1.0
     transitivePeerDependencies:
+      - buffer
+      - iconv-lite
       - supports-color
 
   '@oxc-project/types@0.130.0': {}

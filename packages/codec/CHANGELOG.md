@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.3
+
+### Patch Changes
+
+- fix(codec): suppress late timeout response
+
 ## 2.2.1
 
 ### Patch Changes

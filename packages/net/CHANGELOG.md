@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.2.3
+
+### Patch Changes
+
+- fix(net): use interface-specific broadcast for device discovery
+- Updated dependencies
+  - @novastar/codec@2.2.3
+
 ## 2.2.1
 
 ### Patch Changes
