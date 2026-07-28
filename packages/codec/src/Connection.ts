@@ -263,7 +263,9 @@ export default class Connection<S extends Duplex> extends TypedEmitter<Connectio
   protected listener = (res: Packet): void => {
     const [, resolve] = this.queue.find(([req]) => req.serno === res.serno) ?? [];
     if (resolve) resolve(res);
-    else if (res.source !== 255) debug(`Unknown package ${JSON.stringify(res)}`);
+    else if (res.source !== 255 && res.ack !== ErrorType.Timeout) {
+      debug(`Unknown package ${JSON.stringify(res)}`);
+    }
   };
 
   protected getMaxLength(req: Request<boolean>): number {
