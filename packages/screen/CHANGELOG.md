@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.2.2
+
+### Patch Changes
+
+- 8c04db2: - fix(screen): support VX400 device discovery
+  - fix(screen): tolerate unavailable optional device properties
+
 ## 2.2.1
 
 ### Patch Changes
