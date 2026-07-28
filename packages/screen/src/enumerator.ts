@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import { decodeUIntLE, Request, TimeoutError } from '@novastar/codec';
+import { decodeUIntLE, ErrorType, Request, TimeoutError } from '@novastar/codec';
 import { HDEnableModeEnum } from '@novastar/native/HDEnableMode';
 import { NSCardTypeEnum } from '@novastar/native/NSCardType';
 import { VedioSelectModeEnum } from '@novastar/native/VedioSelectMode';
@@ -28,20 +28,33 @@ async function readMaxPackageSize(session: SessionAPI, index: number): Promise<n
   return 256;
 }
 
+async function readOptional<T>(read: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await read();
+  } catch (e) {
+    if (e instanceof TimeoutError) return fallback;
+    throw e;
+  }
+}
+
 async function readDeviceInfo(session: SessionAPI, index: number): Promise<DeviceInfo | null> {
   try {
+    const model = await session.tryReadControllerModelId(index);
+    if (!model || model.ack !== ErrorType.Succeeded) return null;
     const deviceInfo: DeviceInfo = {
-      model: await session.ReadControllerModelId(index),
-      mac: [...(await session.ReadControllerSnHigh(index))]
+      model: decodeUIntLE(model),
+      mac: [...(await readOptional(() => session.ReadControllerSnHigh(index), Buffer.alloc(0)))]
         .map((byte) => byte.toString(16).padStart(2, '0'))
         .join(':'),
       maxPackageSize: await readMaxPackageSize(session, index),
-      companyId: await session.ReadCompanyID(index),
-      audioControl: await session.ReadAudioControl(index),
-      dviSelect: await session.ReadDviSelect(index),
-      hdEnable: (await session.ReadHDEnable(index)) || HDEnableModeEnum.Bit8,
+      companyId: await readOptional(() => session.ReadCompanyID(index), 0),
+      audioControl: await readOptional(() => session.ReadAudioControl(index), 0),
+      dviSelect: await readOptional(() => session.ReadDviSelect(index), 0),
+      hdEnable:
+        (await readOptional(() => session.ReadHDEnable(index), HDEnableModeEnum.Bit8)) ||
+        HDEnableModeEnum.Bit8,
       videoSelect:
-        (await session.ReadDviMode(index)) === 90
+        (await readOptional(() => session.ReadDviMode(index), 0)) === 90
           ? VedioSelectModeEnum.Manual
           : VedioSelectModeEnum.Auto,
       fieldRate: 60,
@@ -76,12 +89,17 @@ async function readDeviceInfo(session: SessionAPI, index: number): Promise<Devic
  */
 export default async function enumerateDevices(session: SessionAPI): Promise<DeviceInfo[]> {
   const devices: DeviceInfo[] = [];
-  const destination = 255;
-  await session.SetSortOrder(destination, true, 0);
-  for (let i = 0; ; i += 1) {
-    const info = await readDeviceInfo(session, i);
-    if (!info) break;
-    devices.push(info);
+  session.pushTimeout(1500);
+  try {
+    const destination = 255;
+    await session.SetSortOrder(destination, true, 0);
+    for (let i = 0; ; i += 1) {
+      const info = await readDeviceInfo(session, i);
+      if (!info) break;
+      devices.push(info);
+    }
+  } finally {
+    session.popTimeout();
   }
   return devices;
 }
