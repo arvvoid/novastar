@@ -216,6 +216,7 @@ export const IsSystemController = (cardType: NSCardTypeEnum): boolean =>
   cardType === NSCardTypeEnum.V1160 ||
   cardType === NSCardTypeEnum.VX1000 ||
   cardType === NSCardTypeEnum.VX600 ||
+  cardType === NSCardTypeEnum.VX400 ||
   cardType === NSCardTypeEnum.VX400S;
 
 export type PortCount = 1 | 2 | 4 | 6 | 8 | 10 | 16 | 20 | 24 | 32;
@@ -285,6 +286,7 @@ export const GetPortNumber = (cardType: NSCardTypeEnum): PortCount => {
     case NSCardTypeEnum.T6H:
     case NSCardTypeEnum.V960:
     case NSCardTypeEnum.T80:
+    case NSCardTypeEnum.VX400:
     case NSCardTypeEnum.VX400S:
     case NSCardTypeEnum.SD2000E:
     case NSCardTypeEnum.TVSend_4K:
